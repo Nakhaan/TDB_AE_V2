@@ -30,7 +30,7 @@ La solution qui cause le moins de soucis est de :
 
 1. Créer un nouveau projet Dynamic Web Project en suivant ces instructions
     1. L'appeler par exemple "TDB_AE_V2", "TDB_AE_V21", "TDB_AE_V22" etc.
-    2. Les options a choisir : Target runtime = <None> ; Dynamic web module version = 4.0
+    2. Les options a choisir : Target runtime = "None" ; Dynamic web module version = 4.0
     3. Faire 1 fois "NEXT" et s'assurer que le dossier soit bien 'src'
     4. Faire une 2ème fois "NEXT" et s'assurer que le ContentDirectory soit bien "WebContent"
   
