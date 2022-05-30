@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="ISO-8859-1">
+	<link rel="stylesheet" href="../style/style2.css" type="text/css">
+	<link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="Control.js"></script>
+	<script src="../login/js.cookie.js"></script>
+</head>
+
+<body>
+
+<div id="Menu">
+
+</div>
+
+<section class="home-section">
+	<div id="Navigation">
+	</div>
+	<div id="Page">
+	
+	</div>
+</section>
+
+<br>
+
+<label id="ShowMessage">
+</label>
+
+<script>
+   	let sidebar = document.querySelector(".sidebar");
+	let sidebarBtn = document.querySelector(".sidebarBtn");
+	sidebarBtn.onclick = function() {
+	sidebar.classList.toggle("active");
+	if(sidebar.classList.contains("active")){
+	  sidebarBtn.classList.replace("bx-menu" ,"bx-menu-alt-right");
+	}else
+	  sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+	}
+ </script>
+
+</body>
+</html>
