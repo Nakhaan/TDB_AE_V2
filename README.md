@@ -9,12 +9,25 @@ Fait par Adrien, Antoine et Léane !
 Organisation du git
 Le git est organisé de façon suivante :
 
+src
+  |-- entities
+  |-- servlets
+  |-- META-INF
+WebContent
+  |-- login
+  |-- style
+  |-- tdb
+  |-- META-INF
+  |-- WEB-INF
+  
+ET c'EST TOUT ! Pas de dossier 'build', pas de .classpath, . .project, .setting, etc.
+
 ## IMPORTER LES MAJ DE GIT DANS ECLIPSE AU FUR ET A MESURE
 
 La solution qui cause le moins de soucis est de :
 
 1. Créer un nouveau projet Dynamic Web Project en suivant ces instructions
-  1.1. L'appeler par exemple "TDB_AE_V2", "TDB_AE_V21", "TDB_AE_V22" ... (ne pas mettre de point du style "TDB_AE_V2.1" on sait jamais si ca nique tout)
+  1.1. L'appeler par exemple "TDB_AE_V2", "TDB_AE_V21", "TDB_AE_V22" etc.
   1.2. Les options a choisir : Target runtime = <None> ; Dynamic web module version = 4.0
   1.3. Faire 1 fois "NEXT" et s'assurer que le dossier soit bien 'src'
   1.4. Faire une 2ème fois "NEXT" et s'assurer que le ContentDirectory soit bien "WebContent"
