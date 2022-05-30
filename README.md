@@ -21,17 +21,6 @@ Le git est organisé de façon suivante :
     ├── META-INF
     └── WEB-INF
 ```
-
-src
-  |-- entities
-  |-- servlets
-  |-- META-INF
-WebContent
-  |-- login
-  |-- style
-  |-- tdb
-  |-- META-INF
-  |-- WEB-INF
   
 ET c'EST TOUT ! Pas de dossier 'build', pas de .classpath, . .project, .setting, etc.
 
