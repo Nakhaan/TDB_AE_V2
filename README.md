@@ -9,7 +9,7 @@ Fait par Adrien, Antoine et Léane !
 Organisation du git
 Le git est organisé de façon suivante :
 
-'''bash
+```bash
 ├── src
 │   ├── entities
 │   ├── servlets
@@ -20,7 +20,7 @@ Le git est organisé de façon suivante :
     ├── tdb
     ├── META-INF
     └── WEB-INF
-'''
+```
 
 src
   |-- entities
