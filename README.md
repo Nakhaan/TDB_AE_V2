@@ -41,4 +41,4 @@ La solution qui cause le moins de soucis est de :
   
   
 > **Pour l'importation du Filter**
-> Il faut importer la bibliothèque servlet la plus récente, elle est dans le dossier *library* du git.
+> Il faut importer la bibliothèque servlet la plus récente, prendre celle du git.
