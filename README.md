@@ -9,6 +9,19 @@ Fait par Adrien, Antoine et Léane !
 Organisation du git
 Le git est organisé de façon suivante :
 
+.
+├── src
+│   ├── entities
+│   ├── servlets
+│   └── META-INF
+└── WebContent
+    ├── login
+    ├── style
+    ├── tdb
+    ├── META-INF
+    └── WEB-INF
+    
+
 src
   |-- entities
   |-- servlets
