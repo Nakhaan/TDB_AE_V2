@@ -19,14 +19,14 @@ public class Association {
 	@OneToOne
 	private Utilisateur tresorier;
 	
-	@ManyToMany
-	private Collection<Utilisateur> bureau;
+	@ManyToMany(fetch = FetchType.EAGER)
+	private Set<Utilisateur> bureau;
 	
-	@ManyToMany
-	private Collection<Utilisateur> membres;
+	@ManyToMany(fetch = FetchType.EAGER)
+	private Set<Utilisateur> membres;
 	
-	@OneToMany
-	private Collection<Evenement> events;
+	@OneToMany(fetch = FetchType.EAGER)
+	private Set<Evenement> events;
 
 
 	public String getNom() {
@@ -61,27 +61,27 @@ public class Association {
 		this.tresorier = tresorier;
 	}
 
-	public Collection<Utilisateur> getBureau() {
+	public Set<Utilisateur> getBureau() {
 		return bureau;
 	}
 
-	public void setBureau(Collection<Utilisateur> bureau) {
+	public void setBureau(Set<Utilisateur> bureau) {
 		this.bureau = bureau;
 	}
 
-	public Collection<Utilisateur> getMembres() {
+	public Set<Utilisateur> getMembres() {
 		return membres;
 	}
 
-	public void setMembres(Collection<Utilisateur> membres) {
+	public void setMembres(Set<Utilisateur> membres) {
 		this.membres = membres;
 	}
 
-	public Collection<Evenement> getEvents() {
+	public Set<Evenement> getEvents() {
 		return events;
 	}
 
-	public void setEvents(Collection<Evenement> events) {
+	public void setEvents(Set<Evenement> events) {
 		this.events = events;
 	}
 	

@@ -32,9 +32,8 @@ public class Utilisateur {
     
     private String mail;
     
-    
-    @ManyToMany
-    Collection<Association> associations;
+    @ManyToMany(fetch = FetchType.EAGER)
+    Set<Association> associations;
 
     @ManyToMany(mappedBy = "participants",fetch= FetchType.EAGER)
     Set<Evenement> evenements;
@@ -89,6 +88,14 @@ public class Utilisateur {
 
 	public void setMail(String mail) {
 		this.mail = mail;
+	}
+  
+  public Set<Association> getAssociations() {
+		return associations;
+	}
+
+	public void setAssociations(Set<Association> associations) {
+		this.associations = associations;
 	}
 
 	public Set<Evenement> getEvenements() {

@@ -8,9 +8,6 @@ import javax.persistence.*;
 public class Salle {
 	
 	@Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)  
-	private Long id;
-	
 	private String nom;
 	
 	private String batiment;
@@ -20,22 +17,12 @@ public class Salle {
 	private boolean accees_demande;
 	
 	
-	@ManyToMany(mappedBy = "salles")
+	@ManyToMany(mappedBy = "salles",fetch = FetchType.EAGER)
 	private Set<Evenement> activite;
 	
 	
-	@ManyToMany(mappedBy = "salles_accessibles")
+	@ManyToMany(mappedBy = "salles_accessibles",fetch = FetchType.EAGER)
 	Set<Utilisateur> acces;
-
-
-	public Long getId() {
-		return id;
-	}
-
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 
 	public String getNom() {

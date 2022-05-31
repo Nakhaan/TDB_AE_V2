@@ -5,7 +5,6 @@ import java.util.Collection;
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -46,11 +45,16 @@ public class Facade {
 		return em.createQuery("from Utilisateur", Utilisateur.class).getResultList();
 	}
 
+	@GET
+	@Path("/listsalles")
+    @Produces({ "application/json" })
+	public Collection<Salle> listSalles() {
+		return em.createQuery("from Salle", Salle.class).getResultList();	
+	}
 	
 	@POST
 	@Path("/recupeDonneesUser")
 	@Produces({ "application/json" })
-	@Transactional
 	public Utilisateur recupeMembre(Utilisateur u) {
 		String username = u.getUsername();
 		Utilisateur q = em.find(Utilisateur.class, username);
@@ -81,5 +85,27 @@ public class Facade {
 		a.setPresident(prez);
 		a.setTresorier(trez);
 		em.persist(a);
+	}
+	
+	@POST
+	@Path("/delclub")
+    @Consumes({ "application/json" })
+	public void delClub(Association a) {
+		Association ass = em.find(Association.class,a.getNom());
+		em.remove(ass);
+	}
+	
+	@GET
+	@Path("/listassoc")
+    @Produces({ "application/json" })
+	public Collection<Association> listAssoc() {
+		return em.createQuery("from Association", Association.class).getResultList();
+	}
+	
+	@POST
+	@Path("/addsalle")
+    @Consumes({ "application/json" })
+	public void addSalle(Salle s) {
+		em.persist(s);
 	}
 }
