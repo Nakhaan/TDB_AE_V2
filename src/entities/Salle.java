@@ -21,11 +21,11 @@ public class Salle {
 	
 	
 	@ManyToMany(mappedBy = "salles")
-	private Collection<Evenement> activite;
+	private Set<Evenement> activite;
 	
 	
-	@ManyToMany
-	Collection<Utilisateur> acces;
+	@ManyToMany(mappedBy = "salles_accessibles")
+	Set<Utilisateur> acces;
 
 
 	public Long getId() {
@@ -98,22 +98,22 @@ public class Salle {
 	}
 
 
-	public Collection<Evenement> getActivite() {
+	public Set<Evenement> getActivite() {
 		return activite;
 	}
 
 
-	public void setActivite(Collection<Evenement> activite) {
+	public void setActivite(Set<Evenement> activite) {
 		this.activite = activite;
 	}
 
 
-	public Collection<Utilisateur> getAcces() {
+	public Set<Utilisateur> getAcces() {
 		return acces;
 	}
 
 
-	public void setAcces(Collection<Utilisateur> acces) {
+	public void setAcces(Set<Utilisateur> acces) {
 		this.acces = acces;
 	}
 	

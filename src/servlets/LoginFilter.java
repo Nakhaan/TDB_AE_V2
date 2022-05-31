@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,7 +68,10 @@ public class LoginFilter implements Filter {
         Cookie sessionCookie = cookieMap.get("sessionMembre");
 		       
         if ( sessionCookie.getValue() != null ) {
-		        	/* Affichage du dashboard */
+		        	HttpSession session = req.getSession();
+		    		session.setAttribute("sessionMembreServer", sessionCookie);
+		        	
+		            /* Affichage du dashboard */
 		            chain.doFilter( req, res );
 		} else {
 		        	/* Redirection vers le public */
