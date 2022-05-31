@@ -29,7 +29,7 @@ public class Utilisateur {
     
     private String mail;
     
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     Collection<Association> associations;
 
     @ManyToMany(mappedBy = "participants",fetch = FetchType.EAGER)

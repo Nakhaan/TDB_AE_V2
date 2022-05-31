@@ -58,4 +58,26 @@ public class Facade {
 		a.setTresorier(trez);
 		em.persist(a);
 	}
+	
+	@POST
+	@Path("/delclub")
+    @Consumes({ "application/json" })
+	public void delClub(Association a) {
+		Association ass = em.find(Association.class,a.getNom());
+		em.remove(ass);
+	}
+	
+	@GET
+	@Path("/listassoc")
+    @Produces({ "application/json" })
+	public Collection<Association> listAssoc() {
+		return em.createQuery("from Association", Association.class).getResultList();
+	}
+	
+	@POST
+	@Path("/addsalle")
+    @Consumes({ "application/json" })
+	public void addSalle(Salle s) {
+		em.persist(s);
+	}
 }
