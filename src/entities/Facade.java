@@ -5,6 +5,7 @@ import java.util.Collection;
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -36,7 +37,6 @@ public class Facade {
 		String username = u.getUsername();
 		Utilisateur q = em.createQuery("SELECT m FROM Utilisateur m where username=:username AND password=:password", 
 				Utilisateur.class).setParameter("username", username).setParameter("password", password).getSingleResult();
-		
 	}
 	
 	@GET
@@ -44,6 +44,30 @@ public class Facade {
     @Produces({ "application/json" })
 	public Collection<Utilisateur> listUtilisateur() {
 		return em.createQuery("from Utilisateur", Utilisateur.class).getResultList();
+	}
+
+	
+	@POST
+	@Path("/recupeDonneesUser")
+	@Produces({ "application/json" })
+	@Transactional
+	public Utilisateur recupeMembre(Utilisateur u) {
+		String username = u.getUsername();
+		Utilisateur q = em.find(Utilisateur.class, username);
+		return q;
+	}
+	
+	@POST
+	@Path("/modifierDonneesUser")
+	@Consumes({ "application/json" })
+	public void modifierMembre(Utilisateur u) {
+		String username = u.getUsername();
+		Utilisateur q = em.find(Utilisateur.class, username);
+		q.setPrenom(u.getPrenom());
+		q.setNom(u.getNom());
+		q.setMail(u.getMail());
+		q.setAnnee(u.getAnnee());
+		em.merge(q);
 	}
 	
 	@POST
