@@ -45,6 +45,12 @@ public class Facade {
 		return em.createQuery("from Utilisateur", Utilisateur.class).getResultList();
 	}
 
+	@GET
+	@Path("/listsalles")
+    @Produces({ "application/json" })
+	public Collection<Salle> listSalles() {
+		return em.createQuery("from Salle", Salle.class).getResultList();	
+	}
 	
 	@POST
 	@Path("/recupeDonneesUser")

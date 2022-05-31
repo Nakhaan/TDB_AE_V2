@@ -223,8 +223,17 @@ function loadDestructionClub() {
 
 function loadEvenements() {
 	$("#Page").load("evenements.html", function() {
+		$("#BTCreateEvent").click(function() {
+			loadAddEvent();
+		});
+		$("#BTSubscribeEvent").click(function() {
+			loadSubscribeEvent();
+		});
+		$("#BTMyEvents").click(function() {
+			loadListEvents();
+		});
+		loadNavigation("Evenements");
 	});
-	loadNavigation("Evenements");
 }
 
 function loadForum() {
@@ -264,6 +273,7 @@ function loadMain() {
 function loadAddEvent() {
 	$("#ShowMessage").empty();
 	$("#Page").load("AddEvent.html", function() {
+		loadSalles();
 		$("#BTValAddEvent").click(function() {
 			event = {};
 			event.nom=$("#EventName").val();
@@ -275,6 +285,24 @@ function loadAddEvent() {
 			invokePost("rest/addevent", event, "event was added", "failed to add an event");
 			loadEvenements();
 		});
+	});
+}
+
+function loadSalles () {
+	$("#ShowMessage").empty();
+	listSalles = invokeGet("../rest/listsalles", "failed to list salles", function(response) {
+		var list;
+		var nom;
+		listSalles = response;
+		if (listSalles == null) return;
+		list="<select name=\"salles\" id=\"EventRoom\">";
+		for (var i=0; i < listSalles.length; i++) {
+			var s = listSalles[i];
+			list+="<option value=\""+ s.nom + "\">" + s.nom + "</option>";
+		}
+		list+="</select>";
+		$("#selection-salle").empty();
+		$("#selection-salle").append(list);
 	});
 }
 
