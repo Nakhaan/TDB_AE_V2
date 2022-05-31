@@ -1,6 +1,7 @@
 package entities;
 
 import java.util.Collection;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -16,14 +17,15 @@ public class Evenement {
     private String date;
     private String time;
 
-    @ManyToMany
-    Collection<Utilisateur> participants ;
+    @ManyToMany //(cascade = {CascadeType.PERSIST})
+    //@JoinTable(name = "EventUser", joinColumns = @JoinColumn(name = "id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "username"))
+    Set<Utilisateur> participants ;
 
     @ManyToOne
     private Association asso_organisateur;
     
     @ManyToMany
-    private Collection<Salle> salles;
+    private Set<Salle> salles;
 
 	public int getId() {
 		return id;
@@ -65,11 +67,11 @@ public class Evenement {
 		this.time = time;
 	}
 
-	public Collection<Utilisateur> getParticipants() {
+	public Set<Utilisateur> getParticipants() {
 		return participants;
 	}
 
-	public void setParticipants(Collection<Utilisateur> participants) {
+	public void setParticipants(Set<Utilisateur> participants) {
 		this.participants = participants;
 	}
 
@@ -81,11 +83,11 @@ public class Evenement {
 		this.asso_organisateur = asso_organisateur;
 	}
 
-	public Collection<Salle> getSalles() {
+	public Set<Salle> getSalles() {
 		return salles;
 	}
 
-	public void setSalles(Collection<Salle> salles) {
+	public void setSalles(Set<Salle> salles) {
 		this.salles = salles;
 	}
 	
