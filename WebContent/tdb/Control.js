@@ -21,6 +21,9 @@ function loadMenu() {
 		$("#BTReservation").click(function() {
 			loadReservation();
 		});
+		$("#BTMonCompte").click(function() {
+			loadMonCompte();
+		});
 		//if (Cookie.get('sessionMembre')=='admin'){
 		$("#Badmin").load("btadmin.html",function(){
 			$("#BTAdmin").click(function() {
@@ -45,6 +48,54 @@ function loadAccueil() {
 	$("#Page").load("accueil.html", function() {
 	});
 	loadNavigation("Accueil");
+}
+
+function loadMonCompte() {
+	$("#Page").load("monCompte/monCompte.html", function() {
+		var currentUser = Cookies.get('sessionMembre');
+		utilisateur = {};
+		utilisateur.username = currentUser;
+		invokeUser("../rest/recupeDonneesUser",utilisateur,"Erreur Chargement Donnees utilisateur", function(response) {
+			userl = response;
+			$("#RealName").text(userl.prenom + " " + userl.nom);
+			$("#UserName").text(userl.username);
+			$("#EmailUser").text(userl.mail);
+			$("#PromoUser").text(userl.annee);
+		});
+		
+		$("#BTsCompte").load("monCompte/modifierBtnCompte.html", function() {
+		$("#BTModifierCompte").click(function() {
+			loadModifierCompte();
+		});
+	});
+	});
+}
+
+function loadModifierCompte() {
+	$("#BTsCompte").load("monCompte/saveBtnCompte.html", function() {
+		var currentUser = Cookies.get('sessionMembre');
+		$("#ModifierForm").load("monCompte/modifierFormCompte.html", function() {
+			$("#BTSauvegarderCompte").click(function() {
+				var prenom = $("#modifier-prenom").val();
+				var nom = $("#modifier-nom").val();
+				var mail = $("#modifier-email").val();
+				var annee = $("#modifier-annee").val();
+				if ((prenom != null) && (nom != null) && (mail != null) && (annee != null)) {
+					utilisateur = {};
+					utilisateur.prenom = prenom;
+					utilisateur.nom = nom;
+					utilisateur.username = currentUser;
+					utilisateur.mail = mail;
+					utilisateur.annee = annee;
+					invokePost("../rest/modifierDonneesUser",utilisateur,"Erreur de modification Compte");
+					loadMonCompte();
+				} else {
+					$("ModifierErrorMsg").text("Rentrer des modifications valides !");
+					loadMonCompte();
+				}
+			});
+		});
+	});
 }
 
 function loadAdmin() {
@@ -276,7 +327,21 @@ function invokeGet(url, failureMsg, responseHandler) {
 	    type: "GET",
 	    success: responseHandler,
 	    error: function (response) {
-	    	$("#ShowMessage").text(failureMsg);
+	    	console.log(failureMsg);
+	    }
+	});
+}
+
+function invokeUser(url, data, failureMsg, responseHandler) {
+	jQuery.ajax({
+	    url: url,
+	    type: "POST",
+	    data: JSON.stringify(data),
+	    dataType: "json",
+	    contentType: "application/json; charset=utf-8",
+	    success: responseHandler,
+	    error: function (response) {
+	    	$("#RegisterErrorMsg").text(failureMsg);
 	    }
 	});
 }
