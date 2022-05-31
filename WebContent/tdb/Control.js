@@ -21,6 +21,9 @@ function loadMenu() {
 		$("#BTReservation").click(function() {
 			loadReservation();
 		});
+		$("#BTMonCompte").click(function() {
+			loadMonCompte();
+		});
 		//if (Cookie.get('sessionMembre')=='admin'){
 		$("#Badmin").load("btadmin.html",function(){
 			$("#BTAdmin").click(function() {
@@ -45,6 +48,54 @@ function loadAccueil() {
 	$("#Page").load("accueil.html", function() {
 	});
 	loadNavigation("Accueil");
+}
+
+function loadMonCompte() {
+	$("#Page").load("monCompte/monCompte.html", function() {
+		var currentUser = Cookies.get('sessionMembre');
+		utilisateur = {};
+		utilisateur.username = currentUser;
+		invokeUser("../rest/recupeDonneesUser",utilisateur,"Erreur Chargement Donnees utilisateur", function(response) {
+			userl = response;
+			$("#RealName").text(userl.prenom + " " + userl.nom);
+			$("#UserName").text(userl.username);
+			$("#EmailUser").text(userl.mail);
+			$("#PromoUser").text(userl.annee);
+		});
+		
+		$("#BTsCompte").load("monCompte/modifierBtnCompte.html", function() {
+		$("#BTModifierCompte").click(function() {
+			loadModifierCompte();
+		});
+	});
+	});
+}
+
+function loadModifierCompte() {
+	$("#BTsCompte").load("monCompte/saveBtnCompte.html", function() {
+		var currentUser = Cookies.get('sessionMembre');
+		$("#ModifierForm").load("monCompte/modifierFormCompte.html", function() {
+			$("#BTSauvegarderCompte").click(function() {
+				var prenom = $("#modifier-prenom").val();
+				var nom = $("#modifier-nom").val();
+				var mail = $("#modifier-email").val();
+				var annee = $("#modifier-annee").val();
+				if ((prenom != null) && (nom != null) && (mail != null) && (annee != null)) {
+					utilisateur = {};
+					utilisateur.prenom = prenom;
+					utilisateur.nom = nom;
+					utilisateur.username = currentUser;
+					utilisateur.mail = mail;
+					utilisateur.annee = annee;
+					invokePost("../rest/modifierDonneesUser",utilisateur,"Erreur de modification Compte");
+					loadMonCompte();
+				} else {
+					$("ModifierErrorMsg").text("Rentrer des modifications valides !");
+					loadMonCompte();
+				}
+			});
+		});
+	});
 }
 
 function loadAdmin() {
@@ -177,8 +228,17 @@ function loadDestructionClub() {
 
 function loadEvenements() {
 	$("#Page").load("evenements.html", function() {
+		$("#BTCreateEvent").click(function() {
+			loadAddEvent();
+		});
+		$("#BTSubscribeEvent").click(function() {
+			loadSubscribeEvent();
+		});
+		$("#BTMyEvents").click(function() {
+			loadListEvents();
+		});
+		loadNavigation("Evenements");
 	});
-	loadNavigation("Evenements");
 }
 
 function loadForum() {
@@ -218,6 +278,7 @@ function loadMain() {
 function loadAddEvent() {
 	$("#ShowMessage").empty();
 	$("#Page").load("AddEvent.html", function() {
+		loadSalles();
 		$("#BTValAddEvent").click(function() {
 			event = {};
 			event.nom=$("#EventName").val();
@@ -229,6 +290,24 @@ function loadAddEvent() {
 			invokePost("rest/addevent", event, "event was added", "failed to add an event");
 			loadEvenements();
 		});
+	});
+}
+
+function loadSalles () {
+	$("#ShowMessage").empty();
+	listSalles = invokeGet("../rest/listsalles", "failed to list salles", function(response) {
+		var list;
+		var nom;
+		listSalles = response;
+		if (listSalles == null) return;
+		list="<select name=\"salles\" id=\"EventRoom\">";
+		for (var i=0; i < listSalles.length; i++) {
+			var s = listSalles[i];
+			list+="<option value=\""+ s.nom + "\">" + s.nom + "</option>";
+		}
+		list+="</select>";
+		$("#selection-salle").empty();
+		$("#selection-salle").append(list);
 	});
 }
 
@@ -254,6 +333,20 @@ function invokeGet(url, failureMsg, responseHandler) {
 	    success: responseHandler,
 	    error: function (response) {
 	    	console.log(failureMsg);
+	    }
+	});
+}
+
+function invokeUser(url, data, failureMsg, responseHandler) {
+	jQuery.ajax({
+	    url: url,
+	    type: "POST",
+	    data: JSON.stringify(data),
+	    dataType: "json",
+	    contentType: "application/json; charset=utf-8",
+	    success: responseHandler,
+	    error: function (response) {
+	    	$("#RegisterErrorMsg").text(failureMsg);
 	    }
 	});
 }
