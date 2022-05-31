@@ -61,12 +61,5 @@ public class Facade {
 		em.merge(q);
 	}
 	
-	@GET
-	@Path("/listpersons")
-    @Produces({ "application/json" })
-	public Collection<Utilisateur> listpersons() {
-		return em.createQuery("from Utilisateur", Utilisateur.class).getResultList();
-	}
-	
 
 }
