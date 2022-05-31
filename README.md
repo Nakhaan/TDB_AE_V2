@@ -29,10 +29,10 @@ ET c'EST TOUT ! Pas de dossier 'build', pas de .classpath, . .project, .setting,
 La solution qui cause le moins de soucis est de :
 
 1. Créer un nouveau projet Dynamic Web Project en suivant ces instructions
-  1.1. L'appeler par exemple "TDB_AE_V2", "TDB_AE_V21", "TDB_AE_V22" etc.
-  1.2. Les options a choisir : Target runtime = <None> ; Dynamic web module version = 4.0
-  1.3. Faire 1 fois "NEXT" et s'assurer que le dossier soit bien 'src'
-  1.4. Faire une 2ème fois "NEXT" et s'assurer que le ContentDirectory soit bien "WebContent"
+    1. L'appeler par exemple "TDB_AE_V2", "TDB_AE_V21", "TDB_AE_V22" etc.
+    2. Les options a choisir : Target runtime = "None" ; Dynamic web module version = 4.0
+    3. Faire 1 fois "NEXT" et s'assurer que le dossier soit bien 'src'
+    4. Faire une 2ème fois "NEXT" et s'assurer que le ContentDirectory soit bien "WebContent"
   
 
 2. Une fois le projet créer, il suffit de supprimer le dossier "WebContent" et de le remplacer par celui provenant de git
