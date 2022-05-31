@@ -33,6 +33,9 @@ $(document).ready(function() {
 		var createUsernameEntry = $("#create-username").val();
 		var createPasswordEntry = $("#create-password").val();
 		var createEmailEntry = $("#create-email").val();
+		var createNameEntry = $("#create-name").val();
+		var createSurnameEntry = $("#create-surname").val();
+		var createYearEntry = $("#create-year").val();
     var createUsernameValid = false;
     var createPasswordValid = false;
     var createEmailValid = false;
@@ -91,6 +94,10 @@ $(document).ready(function() {
 		utilisateur = {};
 		utilisateur.username = account[0];
 		utilisateur.password = account[1];
+		utilisateur.mail = createEmailEntry;
+		utilisateur.nom = createNameEntry;
+		utilisateur.prenom = createSurnameEntry;
+		utilisateur.annee = createYearEntry;
 		
       $('form').animate({
 			height: "toggle",
@@ -135,6 +142,17 @@ function invokeUser(url, data, failureMsg, responseHandler) {
 	    success: responseHandler,
 	    error: function (response) {
 	    	$("#RegisterErrorMsg").text(failureMsg);
+	    }
+	});
+}
+
+function invokeGet(url, failureMsg, responseHandler) {
+	jQuery.ajax({
+	    url: url,
+	    type: "GET",
+	    success: responseHandler,
+	    error: function (response) {
+	    	$("#ShowMessage").text(failureMsg);
 	    }
 	});
 }

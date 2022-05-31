@@ -21,6 +21,13 @@ function loadMenu() {
 		$("#BTReservation").click(function() {
 			loadReservation();
 		});
+		//if (Cookie.get('sessionMembre')=='admin'){
+		$("#Badmin").load("btadmin.html",function(){
+			$("#BTAdmin").click(function() {
+				loadAdmin();
+			});
+		});
+		//}
 		$("#BTLogOut").click(function() {
 			loadLogOut();
 		});
@@ -39,6 +46,108 @@ function loadAccueil() {
 	});
 	loadNavigation("Accueil");
 }
+
+function loadAdmin() {
+	$("#Page").load("admin.html", function() {
+		$("#BTCreationSalle").click(function() {
+			loadCreationSalle();
+		});
+		$("#BTCreationClub").click(function() {
+			loadCreationClub();
+		});
+		$("#BTDestructionClub").click(function() {
+			loadDestructionClub();
+		});
+		$("#BTModifierClub").click(function() {
+			loadModifierClub();
+		});
+	});
+	loadNavigation("Bonjour Admin !");
+}
+
+function loadCreationSalle() {
+	$("#ShowMessage").empty();
+	$("#Page").load("AddRoom.html", function() {
+		$("#BTValAddEvent").click(function() {
+			event = {};
+			event.nom=$("#EventName").val();
+			event.description=$("#EventDescription").val();	
+			event.date=$("#EventDate").val();
+			event.time=$("#EventTime").val();
+			event.salle=$("#EventRoom").val();
+			event.asso_organisateur=$("#EventOrga").val();
+			invokePost("rest/addevent", event, "event was added", "failed to add an event");
+			loadAdmin();
+		});
+	});
+}
+
+function loadCreationClub() {
+	$("#ShowMessage").empty();
+	$("#Page").load("AddClub.html", function() {
+		var listUsers;
+		invokeGet("../rest/liststudent","failed to list students",function(response){
+			listUsers = response;
+			if (listUsers == null) return;
+			for (var i=0; i < listUsers.length; i++) {
+				var user = listUsers[i];					
+				$("#ListOfPrez").append("<input type='radio' name='Usernamep' value='"+user.username+"'>"+user.prenom+" "+user.nom+"<br>");
+				$("#ListOfTrez").append("<input type='radio' name='Usernamet' value='"+user.username+"'>"+user.prenom+" "+user.nom+"<br>");
+			}
+			$("#BTValAddClub").click(function() {
+				club = {};
+				club.nom=$("#ClubName").val();
+				club.description=$("#ClubDescription").val();
+				prez = {};
+				trez = {};
+				prez.username = $("input[name='Usernamep']:checked").val();
+				trez.username = $("input[name='Usernamet']:checked").val();
+				club.president = prez
+				club.tresorier = trez
+				invokePost("../rest/addclub", club, "club was added", "failed to add a club");
+					
+				loadAdmin();
+				});
+		});
+		
+	});
+}
+
+
+function loadModifierClub() {
+	$("#ShowMessage").empty();
+	$("#Page").load("ModifClub.html", function() {
+		$("#BTValAddEvent").click(function() {
+			event = {};
+			event.nom=$("#EventName").val();
+			event.description=$("#EventDescription").val();	
+			event.date=$("#EventDate").val();
+			event.time=$("#EventTime").val();
+			event.salle=$("#EventRoom").val();
+			event.asso_organisateur=$("#EventOrga").val();
+			invokePost("rest/addevent", event, "event was added", "failed to add an event");
+			loadAdmin();
+		});
+	});
+}
+
+function loadDestructionClub() {
+	$("#ShowMessage").empty();
+	$("#Page").load("AddEvent.html", function() {
+		$("#BTValAddEvent").click(function() {
+			event = {};
+			event.nom=$("#EventName").val();
+			event.description=$("#EventDescription").val();	
+			event.date=$("#EventDate").val();
+			event.time=$("#EventTime").val();
+			event.salle=$("#EventRoom").val();
+			event.asso_organisateur=$("#EventOrga").val();
+			invokePost("rest/addevent", event, "event was added", "failed to add an event");
+			loadAdmin();
+		});
+	});
+}
+
 
 function loadEvenements() {
 	$("#Page").load("evenements.html", function() {

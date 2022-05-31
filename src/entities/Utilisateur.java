@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.management.relation.Role;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,10 +16,7 @@ import javax.persistence.Transient;
 @Entity
 public class Utilisateur {
 	
-	@Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)  
-	private Long id;
-	
+	@Id	
 	private String username;
 
 	private String password;
@@ -34,19 +32,12 @@ public class Utilisateur {
     @ManyToMany
     Collection<Association> associations;
 
-    @ManyToMany(mappedBy = "participants")
+    @ManyToMany(mappedBy = "participants",fetch = FetchType.EAGER)
     Collection<Evenement> evenements;
     
-    @ManyToMany(mappedBy= "acces")
+    @ManyToMany(mappedBy= "acces",fetch = FetchType.EAGER)
     Collection<Salle> salles_accessibles;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getUsername() {
 		return username;
