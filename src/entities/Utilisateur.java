@@ -4,19 +4,22 @@ import java.util.Collection;
 import java.util.Set;
 
 import javax.management.relation.Role;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
 public class Utilisateur {
-	
-	@Id	
+	 
+	@Id
 	private String username;
 
 	private String password;
@@ -29,15 +32,16 @@ public class Utilisateur {
     
     private String mail;
     
+    
     @ManyToMany
     Collection<Association> associations;
 
-    @ManyToMany(mappedBy = "participants",fetch = FetchType.EAGER)
-    Collection<Evenement> evenements;
+    @ManyToMany(mappedBy = "participants",fetch= FetchType.EAGER)
+    Set<Evenement> evenements;
     
-    @ManyToMany(mappedBy= "acces",fetch = FetchType.EAGER)
-    Collection<Salle> salles_accessibles;
-
+    @ManyToMany(fetch= FetchType.EAGER) //(cascade = {CascadeType.PERSIST})
+    //@JoinTable(name = "UserSalles", joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "username"), inverseJoinColumns = @JoinColumn(name = "SALLE_ID", referencedColumnName = "id"))
+    Set<Salle> salles_accessibles;
 
 	public String getUsername() {
 		return username;
@@ -87,19 +91,19 @@ public class Utilisateur {
 		this.mail = mail;
 	}
 
-	public Collection<Evenement> getEvenements() {
+	public Set<Evenement> getEvenements() {
 		return evenements;
 	}
 
-	public void setEvenements(Collection<Evenement> evenements) {
+	public void setEvenements(Set<Evenement> evenements) {
 		this.evenements = evenements;
 	}
 
-	public Collection<Salle> getSalles_accessibles() {
+	public Set<Salle> getSalles_accessibles() {
 		return salles_accessibles;
 	}
 
-	public void setSalles_accessibles(Collection<Salle> salles_accessibles) {
+	public void setSalles_accessibles(Set<Salle> salles_accessibles) {
 		this.salles_accessibles = salles_accessibles;
 	}
     
