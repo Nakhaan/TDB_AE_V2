@@ -38,6 +38,13 @@ public class Facade {
 				Utilisateur.class).setParameter("username", username).setParameter("password", password).getSingleResult();
 	}
 	
+	@GET
+	@Path("/liststudent")
+    @Produces({ "application/json" })
+	public Collection<Utilisateur> listUtilisateur() {
+		return em.createQuery("from Utilisateur", Utilisateur.class).getResultList();
+	}
+	
 	@POST
 	@Path("/recupeDonneesUser")
 	@Produces({ "application/json" })
