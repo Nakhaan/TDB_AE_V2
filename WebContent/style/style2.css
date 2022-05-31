@@ -213,6 +213,36 @@ nav .profile-details i{
   position: relative;
   padding-top: 104px;
 }
+
+.home-content .infos-boxes{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 0 20px;
+  margin-bottom: 26px;
+  border-radius: 12px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+  background-color: aliceblue;
+}
+
+.home-content .button {
+  position:relative;
+  margin-left: 50%;
+  
+}
+
+.home-content .modifier-form {
+  position:relative;
+  margin-left: 20%;
+}
+
+.infos-boxes .nom_user{
+  padding-left: 20px;
+  font-size:xx-large;
+}
+
+
 .home-content .overview-boxes{
   display: flex;
   align-items: center;
