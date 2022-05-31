@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 
 import entities.Utilisateur;
 
+
 @Singleton
 @Path("/")
 public class Facade {
@@ -24,7 +25,6 @@ public class Facade {
 	@Path("/addutilisateur")
     @Consumes({ "application/json" })
 	public void addUtilisateur(Utilisateur u) {
-		System.out.println("coucou");
 		em.persist(u);
 	}
 	
@@ -39,6 +39,23 @@ public class Facade {
 		
 	}
 	
+	@GET
+	@Path("/liststudent")
+    @Produces({ "application/json" })
+	public Collection<Utilisateur> listUtilisateur() {
+		return em.createQuery("from Utilisateur", Utilisateur.class).getResultList();
+	}
 	
-
+	@POST
+	@Path("/addclub")
+    @Consumes({ "application/json" })
+	public void addClub(Association a) {
+		Utilisateur p = a.getPresident();
+		Utilisateur t = a.getTresorier();
+		Utilisateur prez = em.find(Utilisateur.class,p.getUsername());
+		Utilisateur trez = em.find(Utilisateur.class,t.getUsername());
+		a.setPresident(prez);
+		a.setTresorier(trez);
+		em.persist(a);
+	}
 }
