@@ -65,6 +65,13 @@ function loadAccueil() {
 
 function loadEvenements() {
 	$("#Page").load("evenements.html", function() {
+		$("#BTCreateEvent").click(function() {
+			loadAddEvent();
+		});
+		$("#BTSubscribeEvent").click(function() {
+		});
+		$("#BTMyEvents").click(function() {
+		});
 	});
 	loadNavigation("Evenements");
 }
