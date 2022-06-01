@@ -17,7 +17,8 @@ public class Salle {
 	private boolean accees_demande;
 	
 	
-	@ManyToMany(mappedBy = "salles")
+
+	@OneToMany(mappedBy = "salle",fetch = FetchType.EAGER)
 	private Set<Evenement> activite;
 	
 	
