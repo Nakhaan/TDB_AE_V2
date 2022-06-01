@@ -71,14 +71,6 @@ public class Facade {
 		Utilisateur q = em.find(Utilisateur.class, username);
 		return q;
 	}
-	@POST
-	@Path("/recupeDonneesSalle")
-	@Produces({ "application/json" })
-	public Salle recupeSalle(Salle s) {
-		String nom = s.getNom();
-		Salle sa = em.find(Salle.class, nom);
-		return sa;
-	}
 	
 	@POST
 	@Path("/modifierDonneesUser")
@@ -129,11 +121,19 @@ public class Facade {
 	}
 	
 	@GET
+	@Path("/listsalles")
+    @Produces({ "application/json" })
+	public Collection<Salle> listSalles() {
+		return em.createQuery("from Salle", Salle.class).getResultList();
+	}
+	
+	@GET
 	@Path("/listTopic")
     @Produces({ "application/json" })
 	public Collection<Topic> listTopic() {
 		return em.createQuery("from Topic", Topic.class).getResultList();
 	}
+	
 	
 	@POST
 	@Path("/addTopic")

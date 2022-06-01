@@ -22,7 +22,7 @@ public class Salle {
 	private Set<Evenement> activite;
 	
 	
-	@ManyToMany(mappedBy = "salles_accessibles")
+	@ManyToMany(mappedBy = "salles_accessibles",fetch = FetchType.EAGER)
 	Set<Utilisateur> acces;
 
 
