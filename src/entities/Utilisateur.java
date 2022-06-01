@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+@SuppressWarnings("unused")
 @Entity
 public class Utilisateur {
 	 

@@ -314,17 +314,181 @@ function loadCreationClub() {
 function loadModifierClub() {
 	$("#ShowMessage").empty();
 	$("#Page").load("ModifClub.html", function() {
-		$("#BTValAddEvent").click(function() {
-			event = {};
-			event.nom=$("#EventName").val();
-			event.description=$("#EventDescription").val();	
-			event.date=$("#EventDate").val();
-			event.time=$("#EventTime").val();
-			event.salle=$("#EventRoom").val();
-			event.asso_organisateur=$("#EventOrga").val();
-			invokePost("rest/addevent", event, "event was added", "failed to add an event");
-			loadAdmin();
+		club ={};
+		listAssoc = invokeGet("../rest/listassoc", "failed to list salles", function(response) {
+			var list;
+			var nom;
+			listAssoc = response;
+			if (listAssoc == null) return;
+			list="<select class=\"assoc\" id=\"Assochang\">";
+			for (var i=0; i < listAssoc.length; i++) {
+				var a = listAssoc[i];
+				list+="<option value=\""+ a.nom + "\">" + a.nom + "</option>";
+			}
+			list+="</select>";
+			$("#selection-club").empty();
+			$("#selection-club").append(list);
+			var n = listAssoc[0].nom;
+		    $("select.assoc").change(function(){
+		    	n = $(this).children("option:selected").val();
+		    });
+			$("#BTClub").click(function() {
+				Cookies.set('association', n, { expires: 7, path: '/' });
+				loadModifClub1();
+				});
 		});
+				
+	});
+}
+
+function loadModifClub1() {
+	$("#ShowMessage").empty();
+	$("#Page").load("ModifClub1.html", function() {
+
+		club ={};
+		club.nom = Cookies.get('association');
+		asso = invokeUser("../rest/assoc", club,"failed to list salles", function(response) {
+			asso = response;
+			if (asso == null) return;
+			var prez = asso.president;
+			$("#Prez").empty();
+			$("#Prez").append("<p>" + prez.prenom + " " + prez.nom  +"<p>");
+			var trez = asso.tresorier;
+			$("#Trez").empty();
+			$("#Trez").append("<p>" + trez.prenom + " " + trez.nom  +"<p>");
+			var bur = asso.bureau;
+			var list="<ul>";
+			for (var i=0; i < bur.length; i++) {
+				var personne = bur[i];					
+				list+="<li>"+personne.prenom+" "+person.nom+"</li>";
+			}
+			list+="</ul><br>";
+			$("#Bureau").empty();
+			$("#Bureau").append(list);
+			var mem = asso.membres;
+			var list="<ul>";
+			for (var i=0; i < mem.length; i++) {
+				var personne = mem[i];					
+				list+="<li>"+personne.prenom+" "+person.nom+"</li>";
+			}
+			list+="</ul><br>";
+			$("#Membres").empty();
+			$("#Membres").append(list);
+			//deuxieme partie
+			
+			util ={};
+			listutil = invokeGet("../rest/liststudent","failed to list utilisateur", function(response) {
+				var list;
+				var nom;
+				listutil = response;
+				if (listutil == null) return;
+				list="<select class=\"trez\" id=\"trez\">";
+				for (var i=0; i < listutil.length; i++) {
+					var u = listutil[i];
+					list+="<option value=\""+ u.username + "\">" + u.prenom + " " + u.nom +"</option>";
+				}
+				list+="</select>";
+				$("#ListOfTrez").empty();
+				$("#ListOfTrez").append(list);
+				var t ;
+			    $("select.trez").change(function(){
+			    	t = $(this).children("option:selected").val();
+			    });
+				
+				list="<select class=\"prez\" id=\"prez\">";
+				for (var i=0; i < listutil.length; i++) {
+					var u = listutil[i];
+					list+="<option value=\""+ u.username+ "\">" + u.prenom + " " + u.nom +"</option>";
+				}
+				list+="</select>";
+				$("#ListOfPrez").empty();
+				$("#ListOfPrez").append(list);
+				var p ;
+			    $("select.prez").change(function(){
+			    	p = $(this).children("option:selected").val();
+			    });
+			    //Bureau add
+			    list="<select class=\"bur1\" id=\"bur1\">";
+				for (var i=0; i < bur.length; i++) {
+					var u = listutil[i];
+					list+="<option value=\""+ u.username + "\">" + u.prenom + " " + u.nom +"</option>";
+				}
+				list+="</select>";
+				$("#ListOfBureau1").empty();
+				$("#ListOfBureau1").append(list);
+				var b1 ;
+			    $("select.bur1").change(function(){
+			    	b1 = $(this).children("option:selected").val();
+			    });
+			    //Bureau del
+			    list="<select class=\"bur2\" id=\"bur2\">";
+				for (var i=0; i < bur.length; i++) {
+					var u = bur[i];
+					list+="<option value=\""+ u.username + "\">" + u.prenom + " " + u.nom +"</option>";
+				}
+				list+="</select>";
+				$("#ListOfBureau2").empty();
+				$("#ListOfBureau2").append(list);
+				var b2 ;
+			    $("select.bur2").change(function(){
+			    	b2 = $(this).children("option:selected").val();
+			    });
+			    //Membres add
+			    list="<select class=\"mem1\" id=\"mem1\">";
+				for (var i=0; i < listutil.length; i++) {
+					var u = listutil[i];
+					list+="<option value=\""+ u.username + "\">" + u.prenom + " " + u.nom +"</option>";
+				}
+				list+="</select>";
+				$("#ListOfMembre1").empty();
+				$("#ListOfMembre1").append(list);
+				var m1 ;
+			    $("select.mem1").change(function(){
+			    	m1 = $(this).children("option:selected").val();
+			    });
+			    //Membres delete
+			    list="<select class=\"mem2\" id=\"mem2\">";
+				for (var i=0; i < mem.length; i++) {
+					var u = mem[i];
+					list+="<option value=\""+ u.username + "\">" + u.prenom + " " + u.nom +"</option>";
+				}
+				list+="</select>";
+				$("#ListOfMembre2").empty();
+				$("#ListOfMembre2").append(list);
+				var m2 ;
+			    $("select.mem2").change(function(){
+			    	m2 = $(this).children("option:selected").val();
+			    });
+				$("#BTChangeTres").click(function() {
+					invokePost("../rest/changetres",[t,asso],"failed to change tres");
+					loadModifClub1();
+				});
+				$("#BTChangePres").click(function() {
+					invokePost("../rest/changepres",[p,asso],"failed to change pres");
+					loadModifClub1();
+				});
+				$("#BTABur").click(function() {
+					invokePost("../rest/addbur",[b1,asso],"failed to add to bureau");
+					loadModifClub1();
+				});
+				$("#BTAMem").click(function() {
+					invokePost("../rest/addmem",[m1,asso],"failed to add to membres");
+					loadModifClub1();
+				});
+				$("#BTDBur").click(function() {
+					invokePost("../rest/delbur",[b2,asso],"failed to add to bureau");
+					loadModifClub1();
+				});
+				$("#BTDMem").click(function() {
+					invokePost("../rest/delmem",[m2,asso],"failed to add to membres");
+					loadModifClub1();
+				});
+				$("#BTBye").click(function() {
+					Cookies.remove('association',{ path: '/' });
+					loadAdmin();
+				});
+			});
+				
 	});
 }
 
@@ -364,6 +528,25 @@ function loadLogOut() {
 /***************************************************************************/
 
 
+
+
+function loadAssoc () {
+	$("#ShowMessage").empty();
+	listAssoc = invokeGet("../rest/listassoc", "failed to list salles", function(response) {
+		var list;
+		var nom;
+		listAssoc = response;
+		if (listAssoc == null) return;
+		list="<select name=\"Assoc\" id=\"Assochang\">";
+		for (var i=0; i < listAssoc.length; i++) {
+			var a = listAssoc[i];
+			list+="<option value=\""+ a.nom + "\">" + a.nom + "</option>";
+		}
+		list+="</select>";
+		$("#selection-club").empty();
+		$("#selection-club").append(list);
+	});
+}
 
 function invokePost(url, data, successMsg, failureMsg) {
 	jQuery.ajax({
