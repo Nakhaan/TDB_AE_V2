@@ -3,38 +3,43 @@
  */
 
 $(document).ready(function() {
+	
 	loadMenu();
 	loadAccueil();
 });
 
+/***************************************************************************/
+/*Fonctions		************************************************************/
+/***************************************************************************/
+
 function loadMenu() {
-	$("#Menu").load("menu.html", function() {
-		$("#BTAccueil").click(function() {
-			loadAccueil();
-		});
-		$("#BTEvenements").click(function() {
-			loadEvenements();
-		});
-		$("#BTForum").click(function() {
-			loadForum();
-		});
-		$("#BTReservation").click(function() {
-			loadReservation();
-		});
-		$("#BTMonCompte").click(function() {
-			loadMonCompte();
-		});
-		//if (Cookie.get('sessionMembre')=='admin'){
-		$("#Badmin").load("btadmin.html",function(){
-			$("#BTAdmin").click(function() {
-				loadAdmin();
+		$("#Menu").load("menu.html", function() {
+			$("#BTAccueil").click(function() {
+				loadAccueil();
+			});
+			$("#BTEvenements").click(function() {
+				loadEvenements();
+			});
+			$("#BTForum").click(function() {
+				loadForum();
+			});
+			$("#BTReservation").click(function() {
+				loadReservation();
+			});
+			$("#BTMonCompte").click(function() {
+				loadMonCompte();
+			});
+			//if (Cookie.get('sessionMembre')=='admin'){
+				$("#BTadminDIV").load("adminButton.html",function(){
+					$("#BTAdmin").click(function() {
+						loadAdmin();
+					});
+				});
+			//}
+			$("#BTLogOut").click(function() {
+				loadLogOut();
 			});
 		});
-		//}
-		$("#BTLogOut").click(function() {
-			loadLogOut();
-		});
-	});
 }
 
 function loadNavigation(HeadTitle) {
@@ -44,11 +49,105 @@ function loadNavigation(HeadTitle) {
 	});
 }
 
+/***************************************************************************/
+/*Accueil		************************************************************/
+/***************************************************************************/
+
 function loadAccueil() {
-	$("#Page").load("accueil.html", function() {
-	});
-	loadNavigation("Accueil");
+		$("#Page").load("accueil.html", function() {
+		});
+		loadNavigation("Accueil");
 }
+
+/***************************************************************************/
+/*EVENEMENT		************************************************************/
+/***************************************************************************/
+
+function loadEvenements() {
+	$("#Page").load("evenements.html", function() {
+	});
+	loadNavigation("Evenements");
+}
+
+function loadAddEvent() {
+	$("#ShowMessage").empty();
+	$("#Page").load("AddEvent.html", function() {
+		$("#BTValAddEvent").click(function() {
+			event = {};
+			event.nom=$("#EventName").val();
+			event.description=$("#EventDescription").val();	
+			event.date=$("#EventDate").val();
+			event.time=$("#EventTime").val();
+			event.salle("#EventRoom").val();
+			event.asso_organisateur=$("#EventOrga").val();
+			invokePost("rest/addevent", event, "event was added", "failed to add an event");
+			loadEvenements();
+		});
+	});
+}
+
+/***************************************************************************/
+/*FORUM			************************************************************/
+/***************************************************************************/
+
+function loadForum() {
+	$("#Page").load("forum/forum.html", function() {
+		$("#MenuTopic").load("forum/menuTopic.html", function(){
+			$("#AfficherFormTopic").click(function() {
+				loadFormTopic();
+			});
+		});
+		loadTopics();
+	});
+	loadNavigation("Forum");
+}
+
+function loadFormTopic() {
+	$("#TopicMsg").empty();
+	$("#TopicList").empty();
+	$("#TopicList").load("forum/creerTopic.html", function(){
+			$("#BTCreerTopic").click(function() {
+				topic = {};
+				topic.auteur = Cookies.get("sessionMembre");
+				topic.titre = $("#titre-topic").val();
+				topic.description = $("#desc-topic").val();
+				invokePost("../rest/addTopic",topic,"Topic AJout Succes","Topic Ajout Echec");
+				loadForum();
+			});
+		});
+}
+
+function loadTopics() {
+	listPersons = invokeGet("../rest/listTopic", "failed to list topic", function(response) {
+		var list;
+		listTopic = response;
+		if (listTopic == null) {
+			$("#TopicMsg").text("Il n'y a aucun topic.'");
+			return 
+		};
+		for (var i=0; i < listTopic.length; i++) {
+			var topic = listTopic[i];					
+			list+= "<div>" + "<a href=\"/TDB_AE_V22/tdb/forum/topic.html?topicID=" + topic.id + "\" class=\"buttonTopic\">" + "<span>" + topic.titre + "</span><br>" + "</a>" + "<span>" + topic.description + "</span>"  + "</div>";
+		}
+		
+		$("#TopicList").empty();
+		$("#TopicList").append(list);
+	});
+}
+
+/***************************************************************************/
+/*Reservation	************************************************************/
+/***************************************************************************/
+
+function loadReservation() {
+	$("#Page").load("reservation.html", function() {
+	});
+	loadNavigation("Reservation");
+}
+
+/***************************************************************************/
+/*Mon Compte	************************************************************/
+/***************************************************************************/
 
 function loadMonCompte() {
 	$("#Page").load("monCompte/monCompte.html", function() {
@@ -98,6 +197,10 @@ function loadModifierCompte() {
 	});
 }
 
+/***************************************************************************/
+/*ADMIN			************************************************************/
+/***************************************************************************/
+
 function loadAdmin() {
 	$("#Page").load("admin.html", function() {
 		$("#BTCreationSalle").click(function() {
@@ -120,21 +223,22 @@ function loadCreationSalle() {
 	$("#ShowMessage").empty();
 	$("#Page").load("AddRoom.html", function() {
 		salle = {};
-		$("#check1").click(function () {
-            if ($(this).is(":checked")) {
-                salle.projecteur = true;
-            } else {
-            	salle.projecteur = false;
-            }
-        });
-		$("#check2").click(function () {
-            if ($(this).is(":checked")) {
-                salle.accees_demande = true;
-                
-            } else {
-            	salle.accees_demande = false;
-            }
-        });
+		$('#projecteur :checkbox').change(function() {
+		    // this will contain a reference to the checkbox   
+		    if (this.checked) {
+		        salle.projecteur = true;
+		    } else {
+	    	salle.projecteur = false;
+	    }
+	});
+	$('#libre :checkbox').change(function() {
+	    // this will contain a reference to the checkbox   
+	    if (this.checked) {
+	        salle.libre = true;
+	    } else {
+	    	salle.libre = false;
+	    }
+		});
 		$("#BTValAddRoom").click(function() {
 			
 			salle.nom=$("#RoomName").val();
@@ -183,22 +287,16 @@ function loadCreationClub() {
 function loadModifierClub() {
 	$("#ShowMessage").empty();
 	$("#Page").load("ModifClub.html", function() {
-		var listAsso;
-		invokeGet("../rest/listassoc","failed to list association",function(response){
-			listAsso = response;
-			if (listAsso == null) return;
-			for (var i=0; i < listAsso.length; i++) {
-				var asso = listAsso[i];					
-				$("#ListOfAsso").append("<input type='radio' name='asso' value='"+asso.nom+"'>"+asso.nom+" "+asso.description+"<br>");
-			}
-			
-			$("#BTValDelClub").click(function() {
-				club = {};
-				club.nom = $("input[name='asso']:checked").val();
-				invokePost("../rest/delclub", club, "club was deleted", "failed to delete a club");
-					
-				loadAdmin();
-				});
+		$("#BTValAddEvent").click(function() {
+			event = {};
+			event.nom=$("#EventName").val();
+			event.description=$("#EventDescription").val();	
+			event.date=$("#EventDate").val();
+			event.time=$("#EventTime").val();
+			event.salle=$("#EventRoom").val();
+			event.asso_organisateur=$("#EventOrga").val();
+			invokePost("rest/addevent", event, "event was added", "failed to add an event");
+			loadAdmin();
 		});
 	});
 }
@@ -225,91 +323,18 @@ function loadDestructionClub() {
 	});
 }
 
-
-function loadEvenements() {
-	$("#Page").load("evenements.html", function() {
-		$("#BTCreateEvent").click(function() {
-			loadAddEvent();
-		});
-		$("#BTSubscribeEvent").click(function() {
-			loadSubscribeEvent();
-		});
-		$("#BTMyEvents").click(function() {
-			loadListEvents();
-		});
-		loadNavigation("Evenements");
-	});
-}
-
-function loadForum() {
-	$("#Page").load("forum.html", function() {
-	});
-	loadNavigation("Forum");
-}
-
-function loadReservation() {
-	$("#Page").load("reservation.html", function() {
-	});
-	loadNavigation("Réservation");
-}
+/***************************************************************************/
+/*LogOut		************************************************************/
+/***************************************************************************/
 
 function loadLogOut() {
 	Cookies.remove('sessionMembre',{ path: '/' });
-	location.replace("/TDB_AE_V2/");
+	location.replace("/TDB_AE_V22/");
 }
 
-function loadMain() {
-	$("#Main").load("Main.html", function() {
-		$("#BTAddPerson").click(function() {
-			loadAddPerson();
-		});
-		$("#BTAddAddress").click(function() {
-			loadAddAddress();
-		});
-		$("#BTAssociate").click(function() {
-			loadAssociate();
-		});
-		$("#BTList").click(function() {
-			loadList();
-		});
-	});
-}
-
-function loadAddEvent() {
-	$("#ShowMessage").empty();
-	$("#Page").load("AddEvent.html", function() {
-		loadSalles();
-		$("#BTValAddEvent").click(function() {
-			event = {};
-			event.nom=$("#EventName").val();
-			event.description=$("#EventDescription").val();	
-			event.date=$("#EventDate").val();
-			event.time=$("#EventTime").val();
-			event.salle("#EventRoom").val();
-			event.asso_organisateur=$("#EventOrga").val();
-			invokePost("rest/addevent", event, "event was added", "failed to add an event");
-			loadEvenements();
-		});
-	});
-}
-
-function loadSalles () {
-	$("#ShowMessage").empty();
-	listSalles = invokeGet("../rest/listsalles", "failed to list salles", function(response) {
-		var list;
-		var nom;
-		listSalles = response;
-		if (listSalles == null) return;
-		list="<select name=\"salles\" id=\"EventRoom\">";
-		for (var i=0; i < listSalles.length; i++) {
-			var s = listSalles[i];
-			list+="<option value=\""+ s.nom + "\">" + s.nom + "</option>";
-		}
-		list+="</select>";
-		$("#selection-salle").empty();
-		$("#selection-salle").append(list);
-	});
-}
+/***************************************************************************/
+/*INVOKES		************************************************************/
+/***************************************************************************/
 
 function invokePost(url, data, successMsg, failureMsg) {
 	jQuery.ajax({
@@ -319,10 +344,10 @@ function invokePost(url, data, successMsg, failureMsg) {
 	    dataType: "json",
 	    contentType: "application/json; charset=utf-8",
 	    success: function (response) {
-	    	$("#ShowMessage").text(successMsg);
+	    	console.log(successMsg);
 	    },
 	    error: function (response) {
-	    	$("#ShowMessage").text(failureMsg);
+	    	console.log(failureMsg);
 	    }
 	});
 }
@@ -346,7 +371,7 @@ function invokeUser(url, data, failureMsg, responseHandler) {
 	    contentType: "application/json; charset=utf-8",
 	    success: responseHandler,
 	    error: function (response) {
-	    	$("#RegisterErrorMsg").text(failureMsg);
+	    	console.log(failureMsg);
 	    }
 	});
 }
