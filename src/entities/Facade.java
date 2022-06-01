@@ -38,6 +38,16 @@ public class Facade {
 	}
 	
 	@POST
+	@Path("/addevent")
+    @Consumes({ "application/json" })
+	public void addEvenenement(Evenement e) {
+		Salle s = e.getSalle();
+		Salle sa =em.find(Salle.class, s.getNom());
+		e.setSalle(sa);
+		em.persist(e);
+	}
+	
+	@POST
 	@Path("/loginutilisateur")
     @Consumes({ "application/json" })
 	public void verifierMembre(Utilisateur u) {
@@ -54,11 +64,12 @@ public class Facade {
 		return em.createQuery("from Utilisateur", Utilisateur.class).getResultList();
 	}
 
+	
 	@GET
-	@Path("/listsalles")
+	@Path("/listevents")
     @Produces({ "application/json" })
-	public Collection<Salle> listSalles() {
-		return em.createQuery("from Salle", Salle.class).getResultList();	
+	public Collection<Evenement> listEvenements() {
+		return em.createQuery("from Evenement", Evenement.class).getResultList();	
 	}
 	
 	@POST
@@ -116,13 +127,6 @@ public class Facade {
     @Consumes({ "application/json" })
 	public void addSalle(Salle s) {
 		em.persist(s);
-	}
-	
-	@POST
-	@Path("/addevent")
-    @Consumes({ "application/json" })
-	public void addEvenement(Evenement e) {
-		em.persist(e);
 	}
 	
 	@POST
@@ -199,4 +203,62 @@ public class Facade {
 		asso.setMembres(membres);
 		em.merge(asso);
 	}
+
+	@GET
+	@Path("/listsalles")
+    @Produces({ "application/json" })
+	public Collection<Salle> listSalles() {
+		return em.createQuery("from Salle", Salle.class).getResultList();
+	}
+	
+	@GET
+	@Path("/listTopic")
+    @Produces({ "application/json" })
+	public Collection<Topic> listTopic() {
+		return em.createQuery("from Topic", Topic.class).getResultList();
+	}
+	
+	
+	@POST
+	@Path("/addTopic")
+    @Consumes({ "application/json" })
+	public void addTopic(Topic t) {
+		em.persist(t);
+	}
+	
+	@POST
+	@Path("/recupDonneesTopic")
+	@Produces({ "application/json" })
+	public Topic recupDonneesTopic(Topic t) {
+		int ID = t.getId();
+		System.out.println("ID DE CE TOPIC EST : " + ID);
+		Topic t2 = em.find(Topic.class, ID);
+		return t2;
+	}
+	
+	@POST
+	@Path("/addMessToTopic")
+	@Consumes({ "application/json" })
+	public Message addMessToTopic(Message m) {
+		System.out.println("AVANT");
+		System.out.println(m.getMessage());
+		//Topic t = m.getTopic();
+		System.out.println("AVANT 1");
+		//t.addMessages(m);
+		System.out.println("AVANT 3");
+		em.persist(m);
+		System.out.println("AVANT 4");
+		return m;
+		
+	}
+	
+	@POST
+	@Path("/jointure")
+    @Consumes({ "application/json" })
+	public void jointure(Jointure j) {
+		Message m = em.find(Message.class, j.getMessageID());
+		Topic t = em.find(Topic.class, j.getTopicID());
+		m.setTopic(t);
+	}
+	
 }

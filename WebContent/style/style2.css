@@ -214,6 +214,23 @@ nav .profile-details i{
   padding-top: 104px;
 }
 
+.home-content .topic-page h1 h2 {
+	position: relative;
+	text-align: center;
+}
+
+.buttonTopic {
+  font: bold 11px Arial;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  color: #333333;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+}
+
 .home-content .infos-boxes{
   display: flex;
   align-items: center;

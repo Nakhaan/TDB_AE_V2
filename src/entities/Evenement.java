@@ -24,8 +24,8 @@ public class Evenement {
     @ManyToOne
     private Association asso_organisateur;
     
-    @ManyToMany
-    private Set<Salle> salles;
+    @ManyToOne
+    private Salle salle;
 
 	public int getId() {
 		return id;
@@ -83,12 +83,12 @@ public class Evenement {
 		this.asso_organisateur = asso_organisateur;
 	}
 
-	public Set<Salle> getSalles() {
-		return salles;
+	public Salle getSalle() {
+		return salle;
 	}
 
-	public void setSalles(Set<Salle> salles) {
-		this.salles = salles;
+	public void setSalle(Salle salle) {
+		this.salle = salle;
 	}
 	
 }
