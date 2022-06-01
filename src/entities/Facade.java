@@ -29,6 +29,16 @@ public class Facade {
 	}
 	
 	@POST
+	@Path("/addevent")
+    @Consumes({ "application/json" })
+	public void addEvenenement(Evenement e) {
+		Salle s = e.getSalle();
+		Salle sa =em.find(Salle.class, s.getNom());
+		e.setSalle(sa);
+		em.persist(e);
+	}
+	
+	@POST
 	@Path("/loginutilisateur")
     @Consumes({ "application/json" })
 	public void verifierMembre(Utilisateur u) {
@@ -46,6 +56,13 @@ public class Facade {
 	}
 
 	
+	@GET
+	@Path("/listevents")
+    @Produces({ "application/json" })
+	public Collection<Evenement> listEvenements() {
+		return em.createQuery("from Evenement", Evenement.class).getResultList();	
+	}
+	
 	@POST
 	@Path("/recupeDonneesUser")
 	@Produces({ "application/json" })
@@ -53,6 +70,14 @@ public class Facade {
 		String username = u.getUsername();
 		Utilisateur q = em.find(Utilisateur.class, username);
 		return q;
+	}
+	@POST
+	@Path("/recupeDonneesSalle")
+	@Produces({ "application/json" })
+	public Salle recupeSalle(Salle s) {
+		String nom = s.getNom();
+		Salle sa = em.find(Salle.class, nom);
+		return sa;
 	}
 	
 	@POST

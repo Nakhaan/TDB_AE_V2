@@ -72,17 +72,37 @@ function loadEvenements() {
 function loadAddEvent() {
 	$("#ShowMessage").empty();
 	$("#Page").load("AddEvent.html", function() {
+		loadSalles();
 		$("#BTValAddEvent").click(function() {
 			event = {};
 			event.nom=$("#EventName").val();
 			event.description=$("#EventDescription").val();	
 			event.date=$("#EventDate").val();
 			event.time=$("#EventTime").val();
-			event.salle("#EventRoom").val();
+			s = {};
+			s.nom = $("#EventRoom").val();
+			event.salle = s;
 			event.asso_organisateur=$("#EventOrga").val();
-			invokePost("rest/addevent", event, "event was added", "failed to add an event");
+			invokePost("../rest/addevent", event, "event was added", "failed to add an event");
 			loadEvenements();
 		});
+	});
+}
+
+function loadSalles () {
+	$("#ShowMessage").empty();
+	listSalles = invokeGet("../rest/listsalles", "failed to list salles", function(response) {
+		var list;
+		listSalles = response;
+		if (listSalles == null) return;
+		list="<select name=\"salles\" id=\"EventRoom\">";
+		for (var i=0; i < listSalles.length; i++) {
+			var s = listSalles[i];
+			list+="<option value=\""+ s.nom + "\">" + s.nom + "</option>";
+		}
+		list+="</select>";
+		$("#selection-salle").empty();
+		$("#selection-salle").append(list);
 	});
 }
 
@@ -335,6 +355,8 @@ function loadLogOut() {
 /***************************************************************************/
 /*INVOKES		************************************************************/
 /***************************************************************************/
+
+
 
 function invokePost(url, data, successMsg, failureMsg) {
 	jQuery.ajax({
