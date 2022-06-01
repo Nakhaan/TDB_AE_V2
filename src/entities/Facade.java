@@ -1,6 +1,7 @@
 package entities;
 
 import java.util.Collection;
+import java.util.Set;
 
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
@@ -20,6 +21,14 @@ public class Facade {
 	
 	@PersistenceContext
 	EntityManager em;
+	
+//	@POST
+//	@Path("/init")
+//    @Consumes({ "application/json" })
+//	public void init() {
+//		
+//		em.persist(u);
+//	}
 	
 	@POST
 	@Path("/addutilisateur")
@@ -107,5 +116,87 @@ public class Facade {
     @Consumes({ "application/json" })
 	public void addSalle(Salle s) {
 		em.persist(s);
+	}
+	
+	@POST
+	@Path("/addevent")
+    @Consumes({ "application/json" })
+	public void addEvenement(Evenement e) {
+		em.persist(e);
+	}
+	
+	@POST
+	@Path("/assoc")
+    @Consumes({ "application/json" })
+	public Association assoc(Association a) {
+		return em.find(Association.class,a.getNom());
+	}
+	
+	@POST
+	@Path("/changepres")
+    @Consumes({ "application/json" })
+	public void changePres(String nom,Association a) {
+		Association asso =  em.find(Association.class,a.getNom());
+		Utilisateur prez = em.find(Utilisateur.class, nom);
+		asso.setPresident(prez);
+		em.merge(asso);
+	}
+	
+	@POST
+	@Path("/changetres")
+    @Consumes({ "application/json" })
+	public void changeTres(String nom,Association a) {
+		Association asso =  em.find(Association.class,a.getNom());
+		Utilisateur trez = em.find(Utilisateur.class, nom);
+		asso.setPresident(trez);
+		em.merge(asso);
+	}
+	
+	@POST
+	@Path("/addbur")
+    @Consumes({ "application/json" })
+	public void addBur(String nom,Association a) {
+		Association asso =  em.find(Association.class,a.getNom());
+		Utilisateur perso = em.find(Utilisateur.class, nom);
+		Set<Utilisateur> bureau = asso.getBureau();
+		bureau.add(perso);
+		asso.setBureau(bureau);
+		em.merge(asso);
+	}
+	
+	@POST
+	@Path("/addmem")
+    @Consumes({ "application/json" })
+	public void addMem(String nom,Association a) {
+		Association asso =  em.find(Association.class,a.getNom());
+		Utilisateur perso = em.find(Utilisateur.class, nom);
+		Set<Utilisateur> membres = asso.getMembres();
+		membres.add(perso);
+		asso.setMembres(membres);
+		em.merge(asso);
+	}
+	
+	@POST
+	@Path("/delbur")
+    @Consumes({ "application/json" })
+	public void delBur(String nom,Association a) {
+		Association asso =  em.find(Association.class,a.getNom());
+		Set<Utilisateur> bureau = asso.getBureau();
+		Utilisateur perso = em.find(Utilisateur.class, nom);
+		bureau.remove(perso);
+		asso.setBureau(bureau);
+		em.merge(asso);
+	}
+	
+	@POST
+	@Path("/delmem")
+    @Consumes({ "application/json" })
+	public void delMem(String nom,Association a) {
+		Association asso =  em.find(Association.class,a.getNom());
+		Set<Utilisateur> membres = asso.getMembres();
+		Utilisateur perso = em.find(Utilisateur.class, nom);
+		membres.remove(perso);
+		asso.setMembres(membres);
+		em.merge(asso);
 	}
 }
