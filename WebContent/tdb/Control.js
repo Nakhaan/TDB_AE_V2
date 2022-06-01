@@ -154,7 +154,7 @@ function loadTopics() {
 		};
 		for (var i=0; i < listTopic.length; i++) {
 			var topic = listTopic[i];					
-			list+= "<div>" + "<a href=\"/TDB_AE_V22/tdb/forum/topic.html?topicID=" + topic.id + "\" class=\"buttonTopic\">" + "<span>" + topic.titre + "</span><br>" + "</a>" + "<span>" + topic.description + "</span>"  + "</div>";
+			list+= "<div>" + "<a href=\"/TDB_AE_V4/tdb/forum/topic.html?topicID=" + topic.id + "\" class=\"buttonTopic\">" + "<span>" + topic.titre + "</span><br>" + "</a>" + "<span>" + topic.description + "</span>"  + "</div>";
 		}
 		
 		$("#TopicList").empty();
@@ -489,6 +489,7 @@ function loadModifClub1() {
 				});
 			});
 				
+		});
 	});
 }
 
@@ -511,7 +512,7 @@ function loadDestructionClub() {
 				loadAdmin();
 				});
 		});
-	});
+		});
 }
 
 /***************************************************************************/
