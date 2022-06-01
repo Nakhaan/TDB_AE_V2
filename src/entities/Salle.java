@@ -17,11 +17,12 @@ public class Salle {
 	private boolean accees_demande;
 	
 	
+
 	@OneToMany(mappedBy = "salle",fetch = FetchType.EAGER)
 	private Set<Evenement> activite;
 	
 	
-	@ManyToMany(mappedBy = "salles_accessibles",fetch = FetchType.EAGER)
+	@ManyToMany(mappedBy = "salles_accessibles")
 	Set<Utilisateur> acces;
 
 
