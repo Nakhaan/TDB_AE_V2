@@ -69,6 +69,7 @@ function loadEvenements() {
 			loadAddEvent();
 		});
 		$("#BTSubscribeEvent").click(function() {
+			loadSubscribe();
 		});
 		$("#BTMyEvents").click(function() {
 		});
@@ -80,6 +81,7 @@ function loadAddEvent() {
 	$("#ShowMessage").empty();
 	$("#Page").load("AddEvent.html", function() {
 		loadSalles();
+		loadOrgas();
 		$("#BTValAddEvent").click(function() {
 			event = {};
 			event.nom=$("#EventName").val();
@@ -89,7 +91,9 @@ function loadAddEvent() {
 			s = {};
 			s.nom = $("#EventRoom").val();
 			event.salle = s;
-			event.asso_organisateur=$("#EventOrga").val();
+			/*a = {};
+			a.nom = $("#EventOrga").val();
+			event.asso_organisateur= a;*/
 			invokePost("../rest/addevent", event, "event was added", "failed to add an event");
 			loadEvenements();
 		});
@@ -110,6 +114,55 @@ function loadSalles () {
 		list+="</select>";
 		$("#selection-salle").empty();
 		$("#selection-salle").append(list);
+	});
+}
+
+function loadOrgas () {
+	$("#ShowMessage").empty();
+	listSalles = invokeGet("../rest/listassos", "failed to list associations", function(response) {
+		var list;
+		listOrgas = response;
+		if (listOrgas == null) return;
+		list="<select name=\"orgas\" id=\"EventOrga\">";
+		for (var i=0; i < listOrgas.length; i++) {
+			var s = listOrgas[i];
+			list+="<option value=\""+ s.nom + "\">" + s.nom + "</option>";
+		}
+		list+="</select>";
+		$("#selection-orga").empty();
+		$("#selection-orga").append(list);
+	});
+}
+
+function loadSubscribe() {
+	$("#ShowMessage").empty();
+	$("#Page").load("Subscribe.html", function() {
+		loadEvents();
+		$("#BTSubscribeEvent").click(function() {
+			event = {};
+			event.nom=$("#EventSubscribed").val();
+			var currentUser = Cookies.get('sessionMembre');
+			event.description=currentUser; // On transmet le nom de l'user via la string description
+			invokePost("../rest/subscribeevent", event, "user subsribed successfully", "failed to subscribe");
+			loadEvenements();
+		});
+	});
+}
+
+function loadEvents () {
+	$("#ShowMessage").empty();
+	listSalles = invokeGet("../rest/listevents", "failed to list evenements", function(response) {
+		var list;
+		listEvenements = response;
+		if (listEvenements == null) return;
+		list="<select name=\"events\" id=\"EventSubscribed\">";
+		for (var i=0; i < listEvenements.length; i++) {
+			var s = listEvenements[i];
+			list+="<option value=\""+ s.nom + "\">" + s.nom + "</option>";
+		}
+		list+="</select>";
+		$("#selection-event").empty();
+		$("#selection-event").append(list);
 	});
 }
 

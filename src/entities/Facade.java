@@ -48,6 +48,27 @@ public class Facade {
 		em.persist(e);
 	}
 	
+	/*@POST
+	@Path("/recupeOrgaUserPresident")
+	@Produces({ "application/json" })
+	public Association recupeOrgaUserPresident(Utilisateur u) {
+		String username = u.getUsername();
+		Association a = em.createQuery("SELECT a FROM Association a where president=:username", Association.class).setParameter("username", username).getSingleResult();
+		return a;
+	}*/
+	
+	@POST
+	@Path("/subscribeevent")
+    @Consumes({ "application/json" })
+	public void SubscribeEvenenement(Evenement e) {
+		Evenement ev =em.find(Evenement.class, e.getNom());
+		Utilisateur ut = em.find(Utilisateur.class, e.getDescription());
+		Set<Utilisateur> participants = ev.getParticipants();
+		participants.add(ut);
+		ev.setParticipants(participants);
+		em.merge(ev);
+	}
+	
 	@POST
 	@Path("/loginutilisateur")
     @Consumes({ "application/json" })
@@ -216,6 +237,13 @@ public class Facade {
     @Produces({ "application/json" })
 	public Collection<Salle> listSalles() {
 		return em.createQuery("from Salle", Salle.class).getResultList();
+	}
+	
+	@GET
+	@Path("/listassos")
+    @Produces({ "application/json" })
+	public Collection<Association> listAssos() {
+		return em.createQuery("from Association", Association.class).getResultList();
 	}
 	
 	@GET
