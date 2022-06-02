@@ -161,9 +161,10 @@ public class Facade {
 	@POST
 	@Path("/changepres")
     @Consumes({ "application/json" })
-	public void changePres(String nom,Association a) {
+	public void changePres(Association a) {
 		Association asso =  em.find(Association.class,a.getNom());
-		Utilisateur prez = em.find(Utilisateur.class, nom);
+		Utilisateur p = a.getPresident();
+		Utilisateur prez = em.find(Utilisateur.class,p.getUsername());
 		asso.setPresident(prez);
 		em.merge(asso);
 	}
@@ -171,9 +172,10 @@ public class Facade {
 	@POST
 	@Path("/changetres")
     @Consumes({ "application/json" })
-	public void changeTres(String nom,Association a) {
+	public void changeTres(Association a) {
 		Association asso =  em.find(Association.class,a.getNom());
-		Utilisateur trez = em.find(Utilisateur.class, nom);
+		Utilisateur t = a.getPresident();
+		Utilisateur trez = em.find(Utilisateur.class,t.getUsername());
 		asso.setPresident(trez);
 		em.merge(asso);
 	}
@@ -181,9 +183,10 @@ public class Facade {
 	@POST
 	@Path("/addbur")
     @Consumes({ "application/json" })
-	public void addBur(String nom,Association a) {
+	public void addBur(Association a) {
 		Association asso =  em.find(Association.class,a.getNom());
-		Utilisateur perso = em.find(Utilisateur.class, nom);
+		Utilisateur p = a.getPresident();
+		Utilisateur perso = em.find(Utilisateur.class,p.getUsername());
 		Set<Utilisateur> bureau = asso.getBureau();
 		bureau.add(perso);
 		asso.setBureau(bureau);
@@ -193,9 +196,10 @@ public class Facade {
 	@POST
 	@Path("/addmem")
     @Consumes({ "application/json" })
-	public void addMem(String nom,Association a) {
+	public void addMem(Association a) {
 		Association asso =  em.find(Association.class,a.getNom());
-		Utilisateur perso = em.find(Utilisateur.class, nom);
+		Utilisateur p = a.getPresident();
+		Utilisateur perso = em.find(Utilisateur.class,p.getUsername());
 		Set<Utilisateur> membres = asso.getMembres();
 		membres.add(perso);
 		asso.setMembres(membres);
@@ -205,10 +209,11 @@ public class Facade {
 	@POST
 	@Path("/delbur")
     @Consumes({ "application/json" })
-	public void delBur(String nom,Association a) {
+	public void delBur(Association a) {
 		Association asso =  em.find(Association.class,a.getNom());
 		Set<Utilisateur> bureau = asso.getBureau();
-		Utilisateur perso = em.find(Utilisateur.class, nom);
+		Utilisateur p = a.getPresident();
+		Utilisateur perso = em.find(Utilisateur.class,p.getUsername());
 		bureau.remove(perso);
 		asso.setBureau(bureau);
 		em.merge(asso);
@@ -217,10 +222,11 @@ public class Facade {
 	@POST
 	@Path("/delmem")
     @Consumes({ "application/json" })
-	public void delMem(String nom,Association a) {
+	public void delMem(Association a) {
 		Association asso =  em.find(Association.class,a.getNom());
 		Set<Utilisateur> membres = asso.getMembres();
-		Utilisateur perso = em.find(Utilisateur.class, nom);
+		Utilisateur p = a.getPresident();
+		Utilisateur perso = em.find(Utilisateur.class,p.getUsername());
 		membres.remove(perso);
 		asso.setMembres(membres);
 		em.merge(asso);

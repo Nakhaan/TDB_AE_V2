@@ -62,7 +62,7 @@ function loadListMessage(ceTopic) {
 	} else {
 		for (var i=0; i < messages.length; i++) {
 					var message = messages[i];
-					$("#MessageList").append("<div> <span>" + "Auteur : " + message.auteur + "</span>" + "<br>" + "<div>" + "Message : " + message.message + "</div> </div>" + "<br>");				
+					$("#MessageList").append("<div class=\"messageTopic\"> <span class=\"authorFrom\">From :</span>" + "<span class=\"authorName\">" + message.auteur + "</span>" + "<br>" + "<p class=\"authorMsg\">" + message.message + "</p> <span class=\"dateMsg1\">Envoye le : </span>" + "<span class=\"dateMsg2\">12/05/2022</span><br></div>");				
 		}
 	}
 }
