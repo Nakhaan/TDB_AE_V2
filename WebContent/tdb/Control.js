@@ -409,7 +409,7 @@ function loadModifClub1() {
 			    });
 			    //Bureau add
 			    list="<select class=\"bur1\" id=\"bur1\">";
-				for (var i=0; i < bur.length; i++) {
+				for (var i=0; i < listutil.length; i++) {
 					var u = listutil[i];
 					list+="<option value=\""+ u.username + "\">" + u.prenom + " " + u.nom +"</option>";
 				}
@@ -460,27 +460,45 @@ function loadModifClub1() {
 			    	m2 = $(this).children("option:selected").val();
 			    });
 				$("#BTChangeTres").click(function() {
-					invokePost("../rest/changetres",[t,asso],"failed to change tres");
+					tres = {};
+					tres.username  = t;
+					asso.president = tres;
+					invokePost("../rest/changetres",asso,"failed to change tres");
 					loadModifClub1();
 				});
 				$("#BTChangePres").click(function() {
-					invokePost("../rest/changepres",[p,asso],"failed to change pres");
+					pres = {};
+					pres.username  = p;
+					asso.president = pres;
+					invokePost("../rest/changepres",asso,"failed to change pres");
 					loadModifClub1();
 				});
 				$("#BTABur").click(function() {
-					invokePost("../rest/addbur",[b1,asso],"failed to add to bureau");
+					bur = {};
+					bur.username  = b1;
+					asso.president = bur;
+					invokePost("../rest/addbur",asso,"failed to add to bureau");
 					loadModifClub1();
 				});
 				$("#BTAMem").click(function() {
-					invokePost("../rest/addmem",[m1,asso],"failed to add to membres");
+					mem = {};
+					mem.username  = m1;
+					asso.president = mem;
+					invokePost("../rest/addmem",asso,"failed to add to membres");
 					loadModifClub1();
 				});
 				$("#BTDBur").click(function() {
-					invokePost("../rest/delbur",[b2,asso],"failed to add to bureau");
+					bur = {};
+					bur.username  = b2;
+					asso.president = bur;
+					invokePost("../rest/delbur",asso,"failed to add to bureau");
 					loadModifClub1();
 				});
 				$("#BTDMem").click(function() {
-					invokePost("../rest/delmem",[m2,asso],"failed to add to membres");
+					mem = {};
+					mem.username  = m2;
+					asso.president = mem;
+					invokePost("../rest/delmem",asso,"failed to add to membres");
 					loadModifClub1();
 				});
 				$("#BTBye").click(function() {
