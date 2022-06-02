@@ -142,11 +142,7 @@ function loadSubscribe() {
 			event = {};
 			event.nom=$("#EventName").val();
 			var currentUser = Cookies.get('sessionMembre');
-			utilisateur = {};
-			utilisateur.username = currentUser;
-			var participants = new Set();
-			participants.add(utilisateur);
-			event.participants=participants;
+			event.description=currentUser; // On transmet le nom de l'user via la string description
 			invokePost("../rest/subscribeevent", event, "user subsribed successfully", "failed to subscribe");
 			loadEvenements();
 		});

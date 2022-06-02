@@ -61,14 +61,8 @@ public class Facade {
 	@Path("/subscribeevent")
     @Consumes({ "application/json" })
 	public void SubscribeEvenenement(Evenement e) {
-		Set<Utilisateur> ps = e.getParticipants();
-		Iterator it = ps.iterator();
-		Object u = null;
-		for(Iterator i=ps.iterator(); i.hasNext(); u=it.next()) {
-			u=it.next();
-		}
 		Evenement ev =em.find(Evenement.class, e.getNom());
-		Utilisateur ut = em.find(Utilisateur.class, u.toString());
+		Utilisateur ut = em.find(Utilisateur.class, e.getDescription());
 		Set<Utilisateur> participants = ev.getParticipants();
 		participants.add(ut);
 		ev.setParticipants(participants);
