@@ -18,6 +18,7 @@
   width: 60px;
 }
 
+
 .sidebar .logo-details{
   height: 80px;
   display: flex;
@@ -219,18 +220,6 @@ nav .profile-details i{
 	text-align: center;
 }
 
-.buttonTopic {
-  font: bold 11px Arial;
-  text-decoration: none;
-  background-color: #EEEEEE;
-  color: #333333;
-  padding: 2px 6px 2px 6px;
-  border-top: 1px solid #CCCCCC;
-  border-right: 1px solid #333333;
-  border-bottom: 1px solid #333333;
-  border-left: 1px solid #CCCCCC;
-}
-
 .home-content .infos-boxes{
   display: flex;
   align-items: center;
@@ -282,6 +271,184 @@ nav .profile-details i{
   font-size: 20px;
   font-weight: 500;
 }
+
+
+
+
+
+
+
+
+.home-content .topic-page {
+	text-align: center;
+}
+
+.topic-page h1 {
+	font-size: 40px;
+}
+
+.topic-page h2 {
+	font-size: 30px;
+  color:gray;
+}
+
+.TopicMenu {
+  text-align: center;
+  height: 40px;
+  margin-top: 60px;
+  margin-bottom: 40px;
+}
+
+.buttonCreerTopic {
+  width: 20%;
+  height: 100%;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  font-size: 20px;
+}
+
+
+.Topic-box {
+  text-align: center;
+  height: 100px;
+  margin-top: 10px;
+  
+}
+
+.buttonTopic {
+  
+  width:95%;
+  background-color: white;
+  border-radius: 10px;
+  border:none;
+  height: 100%;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  
+}
+
+.buttonTopic:hover {
+  background-color: whitesmoke;
+}
+
+.buttonTopic:active {
+  background-color: white;
+}
+
+.TitreTopic {
+  text-align: center;
+  text-decoration: underline;
+  font-size: 30px;
+  text-decoration-style: solid;
+}
+
+.DescTopic {
+  color:gray;
+  text-align: center;
+  font-size: 15px;
+}
+
+.topic-form {
+  margin-bottom: 30px;
+}
+
+.TitreTopicCreation {
+  font-size: 35px;
+  margin-right: 30px;
+}
+
+.InputTopicCrea {
+  height: 30px;
+  width: 600px;
+}
+
+
+.buttonRetourTopic {
+  width: 20%;
+  height: 100%;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.topicHeader {
+  background-color: rgb(223, 222, 222);
+  padding-bottom: 5px;
+  margin-left: 60px;
+  margin-right: 60px;
+  margin-bottom: 30px;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.creerPar {
+  text-decoration: underline;
+}
+
+.AuteurTopic {
+  text-align: right;
+  padding-right: 15px;
+}
+
+.messageTopic {
+  text-align: left;
+  width:95%;
+  background-color: white;
+  border-radius: 10px;
+  border:none;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding-left: 15px;
+  margin-left: 15px;
+  margin-top: 8px;
+}
+
+.authorFrom {
+  color: black;
+  font-size: 20px;
+  text-decoration-line: underline;
+}
+
+.authorName {
+  margin-left: 20px;
+  font-style: italic;
+  font-size: 20px;
+}
+
+.authorMsg {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.dateMsg1 {
+  font-size: 15px;
+  text-decoration-line: underline;
+}
+
+.dateMsg2 {
+  font-size: 15px;
+  margin-left: 20px;
+  font-style: italic;
+  
+}
+
+#NewMessage {
+  margin-top: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .home-content .box .number{
   display: inline-block;
   font-size: 35px;

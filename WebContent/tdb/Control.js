@@ -154,7 +154,7 @@ function loadTopics() {
 		};
 		for (var i=0; i < listTopic.length; i++) {
 			var topic = listTopic[i];					
-			list+= "<div>" + "<a href=\"/TDB_AE_V4/tdb/forum/topic.html?topicID=" + topic.id + "\" class=\"buttonTopic\">" + "<span>" + topic.titre + "</span><br>" + "</a>" + "<span>" + topic.description + "</span>"  + "</div>";
+			list+= "<div class=\"Topic-box\">" + "<a href=\"/TDB_AE_V4/tdb/forum/topic.html?topicID=" + topic.id + "\">" + "<button class=\"buttonTopic\">" + "<span class=\"TitreTopic\">" + topic.titre + "</span><br>" + "<span class=\"DescTopic\">" + topic.description + "</span>" + "</button>" + "</a>" + "</div>";
 		}
 		
 		$("#TopicList").empty();
