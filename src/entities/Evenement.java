@@ -17,7 +17,7 @@ public class Evenement {
     private String date;
     private String time;
 
-    @ManyToMany //(cascade = {CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.EAGER) //(cascade = {CascadeType.PERSIST})
     //@JoinTable(name = "EventUser", joinColumns = @JoinColumn(name = "id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "username"))
     Set<Utilisateur> participants ;
 

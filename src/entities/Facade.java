@@ -1,6 +1,7 @@
 package entities;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.ejb.Singleton;
@@ -45,6 +46,33 @@ public class Facade {
 		Salle sa =em.find(Salle.class, s.getNom());
 		e.setSalle(sa);
 		em.persist(e);
+	}
+	
+	/*@POST
+	@Path("/recupeOrgaUserPresident")
+	@Produces({ "application/json" })
+	public Association recupeOrgaUserPresident(Utilisateur u) {
+		String username = u.getUsername();
+		Association a = em.createQuery("SELECT a FROM Association a where president=:username", Association.class).setParameter("username", username).getSingleResult();
+		return a;
+	}*/
+	
+	@POST
+	@Path("/subscribeevent")
+    @Consumes({ "application/json" })
+	public void SubscribeEvenenement(Evenement e) {
+		Set<Utilisateur> ps = e.getParticipants();
+		Iterator it = ps.iterator();
+		Object u = null;
+		for(Iterator i=ps.iterator(); i.hasNext(); u=it.next()) {
+			u=it.next();
+		}
+		Evenement ev =em.find(Evenement.class, e.getNom());
+		Utilisateur ut = em.find(Utilisateur.class, u.toString());
+		Set<Utilisateur> participants = ev.getParticipants();
+		participants.add(ut);
+		ev.setParticipants(participants);
+		em.merge(ev);
 	}
 	
 	@POST
@@ -209,6 +237,13 @@ public class Facade {
     @Produces({ "application/json" })
 	public Collection<Salle> listSalles() {
 		return em.createQuery("from Salle", Salle.class).getResultList();
+	}
+	
+	@GET
+	@Path("/listassos")
+    @Produces({ "application/json" })
+	public Collection<Association> listAssos() {
+		return em.createQuery("from Association", Association.class).getResultList();
 	}
 	
 	@GET
