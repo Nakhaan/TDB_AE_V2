@@ -140,7 +140,7 @@ function loadSubscribe() {
 		loadEvents();
 		$("#BTSubscribeEvent").click(function() {
 			event = {};
-			event.nom=$("#EventName").val();
+			event.nom=$("#EventSubscribed").val();
 			var currentUser = Cookies.get('sessionMembre');
 			event.description=currentUser; // On transmet le nom de l'user via la string description
 			invokePost("../rest/subscribeevent", event, "user subsribed successfully", "failed to subscribe");
