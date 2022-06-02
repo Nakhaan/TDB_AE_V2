@@ -46,6 +46,8 @@ function loadCeTopic() {
 		$("#CeTopicTitle").append(ceTopic.titre);
 		$("#CeTopicDescription").empty();
 		$("#CeTopicDescription").append(ceTopic.description);
+		$("#AuteurTopicName").empty();
+		$("#AuteurTopicName").append(ceTopic.auteur);
 		console.log("ERREUR 3");
 		loadListMessage(ceTopic);
 		console.log("ERREUR 4");
@@ -70,6 +72,7 @@ function loadListMessage(ceTopic) {
 function loadCreerMessage(ceTopic) {
 	$("#MenuMessage").load("menuMessage.html", function() {
 			$("#BTCreerMessage").click(function() {
+				$("#MenuMessage").empty();
 				console.log("ERREUR 6");
 				$("#NewMessage").load("newMessage.html", function() {
 					$("#BTSubmitMessage").click(function () {
@@ -86,6 +89,7 @@ function loadCreerMessage(ceTopic) {
 							join.topicID = ceTopic.id;
 							join.messageID = returnMess.id;
 							invokePost("../../rest/jointure", join, "Jointure effective", "Erreur jointure")
+							$("#EntreeMessage").empty();
 							loadCeTopic()
 						});
 						console.log("AVANT INVOKEPOST");

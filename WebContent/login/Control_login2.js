@@ -3,7 +3,7 @@
  */
  
 $(document).ready(function() {
-	
+		
 	var loginUsername;
 	var loginPassword;
 	var loginUsernameAdmin = "admin";
@@ -104,7 +104,7 @@ $(document).ready(function() {
 			opacity: "toggle"
 		}, "fast");
 
-		invokePost("rest/addutilisateur", utilisateur, "L'utilisateur a été ajouté'", "Erreur Ajout utilisateur");
+		invokePost("rest/addutilisateur", utilisateur, "L'utilisateur a ete ajoute'", "Erreur Ajout utilisateur");
     }
 	});
 	

@@ -6,6 +6,8 @@ $(document).ready(function() {
 	
 	loadMenu();
 	loadAccueil();
+	loadSmallDataBase();
+	
 });
 
 /***************************************************************************/
@@ -22,9 +24,6 @@ function loadMenu() {
 			});
 			$("#BTForum").click(function() {
 				loadForum();
-			});
-			$("#BTReservation").click(function() {
-				loadReservation();
 			});
 			$("#BTMonCompte").click(function() {
 				loadMonCompte();
@@ -54,9 +53,63 @@ function loadNavigation(HeadTitle) {
 /***************************************************************************/
 
 function loadAccueil() {
-		$("#Page").load("accueil.html", function() {
+		$("#Page").load("accueil.html", function() {	
 		});
+		loadCurrentsEvents();
+		loadCurrentsTopics();
 		loadNavigation("Accueil");
+}
+
+function loadCurrentsEvents() {
+	listEvents = invokeGet("../rest/listevents", "failed to list salles", function(response) {
+		var listDate;
+		var listAsso;
+		var listNomEvent;
+		listEvents = response;
+		if (listEvents.length == 0) {
+			$("#EVENTTOCOME").append("Aucun evenement a venir !")
+			return;
+		}
+		listDate="<ul class=\"details\"> <li class=\"topic\">Date</li>";
+		listAsso="<ul class=\"details\"> <li class=\"topic\">Asso</li>";
+		listNomEvent="<ul class=\"details\"> <li class=\"topic\">Events</li>";
+		for (var i=0; i < listEvents.length; i++) {
+			var ev = listEvents[i];
+			listDate+="<li><a href=\"#\">" + ev.date + "</a></li>";
+			listAsso+="<li><a href=\"#\">" + ev.asso_organisateur.nom + "</a></li>";
+			listNomEvent+="<li><a href=\"#\">" + ev.nom + "</a></li>";
+		}
+		listDate+="</ul>";
+		listAsso+="</ul>";
+		listNomEvent+="</ul>";
+		$("#EVENTTOCOME").empty();
+		$("#EVENTTOCOME").append(listDate);
+		$("#EVENTTOCOME").append(listAsso);
+		$("#EVENTTOCOME").append(listNomEvent);
+	});
+	$("#SeeAll").click(function() {
+		loadForum();
+	});
+	
+}
+
+function loadCurrentsTopics() {
+	listTopics = invokeGet("../rest/listTopic", "failed to list salles", function(response) {
+		var listNomTopics;
+		listTopics = response;
+		if (listTopics.length == 0) {
+			$("#CURRENTTOPICS").append("Aucun topics actuellement!")
+			return;
+		}
+		listNomTopics="<ul class=\"top-sales-details\">";
+		for (var i=0; i < listTopics.length; i++) {
+			var tp = listTopics[i];
+			listNomTopics+="<li><a href=\"#\"><span class=\"product\">" + tp.titre + "</span></a></li>";
+		}
+		listNomTopics+="</ul>";
+		$("#CURRENTTOPICS").empty();
+		$("#CURRENTTOPICS").append(listNomTopics);
+	});
 }
 
 /***************************************************************************/
@@ -69,7 +122,6 @@ function loadEvenements() {
 			loadAddEvent();
 		});
 		$("#BTSubscribeEvent").click(function() {
-			loadSubscribe();
 		});
 		$("#BTMyEvents").click(function() {
 		});
@@ -80,8 +132,8 @@ function loadEvenements() {
 function loadAddEvent() {
 	$("#ShowMessage").empty();
 	$("#Page").load("AddEvent.html", function() {
+		loadAssoc();
 		loadSalles();
-		loadOrgas();
 		$("#BTValAddEvent").click(function() {
 			event = {};
 			event.nom=$("#EventName").val();
@@ -91,9 +143,9 @@ function loadAddEvent() {
 			s = {};
 			s.nom = $("#EventRoom").val();
 			event.salle = s;
-			/*a = {};
-			a.nom = $("#EventOrga").val();
-			event.asso_organisateur= a;*/
+			asso = {};
+			asso.nom = $("#EventOrga").val();
+			event.asso_organisateur=asso;
 			invokePost("../rest/addevent", event, "event was added", "failed to add an event");
 			loadEvenements();
 		});
@@ -117,52 +169,20 @@ function loadSalles () {
 	});
 }
 
-function loadOrgas () {
+function loadAssoc() {
 	$("#ShowMessage").empty();
-	listSalles = invokeGet("../rest/listassos", "failed to list associations", function(response) {
+	listAssoc = invokeGet("../rest/listassoc", "failed to list salles", function(response) {
 		var list;
-		listOrgas = response;
-		if (listOrgas == null) return;
-		list="<select name=\"orgas\" id=\"EventOrga\">";
-		for (var i=0; i < listOrgas.length; i++) {
-			var s = listOrgas[i];
-			list+="<option value=\""+ s.nom + "\">" + s.nom + "</option>";
+		listAssoc = response;
+		if (listAssoc == null) return;
+		list="<select name=\"Assoc\" id=\"EventOrga\">";
+		for (var i=0; i < listAssoc.length; i++) {
+			var a = listAssoc[i];
+			list+="<option value=\""+ a.nom + "\">" + a.nom + "</option>";
 		}
 		list+="</select>";
-		$("#selection-orga").empty();
-		$("#selection-orga").append(list);
-	});
-}
-
-function loadSubscribe() {
-	$("#ShowMessage").empty();
-	$("#Page").load("Subscribe.html", function() {
-		loadEvents();
-		$("#BTSubscribeEvent").click(function() {
-			event = {};
-			event.nom=$("#EventSubscribed").val();
-			var currentUser = Cookies.get('sessionMembre');
-			event.description=currentUser; // On transmet le nom de l'user via la string description
-			invokePost("../rest/subscribeevent", event, "user subsribed successfully", "failed to subscribe");
-			loadEvenements();
-		});
-	});
-}
-
-function loadEvents () {
-	$("#ShowMessage").empty();
-	listSalles = invokeGet("../rest/listevents", "failed to list evenements", function(response) {
-		var list;
-		listEvenements = response;
-		if (listEvenements == null) return;
-		list="<select name=\"events\" id=\"EventSubscribed\">";
-		for (var i=0; i < listEvenements.length; i++) {
-			var s = listEvenements[i];
-			list+="<option value=\""+ s.nom + "\">" + s.nom + "</option>";
-		}
-		list+="</select>";
-		$("#selection-event").empty();
-		$("#selection-event").append(list);
+		$("#selection-club").empty();
+		$("#selection-club").append(list);
 	});
 }
 
@@ -183,6 +203,7 @@ function loadForum() {
 }
 
 function loadFormTopic() {
+	$("#MenuTopic").empty();
 	$("#TopicMsg").empty();
 	$("#TopicList").empty();
 	$("#TopicList").load("forum/creerTopic.html", function(){
@@ -194,22 +215,26 @@ function loadFormTopic() {
 				invokePost("../rest/addTopic",topic,"Topic AJout Succes","Topic Ajout Echec");
 				loadForum();
 			});
+			$("#BTRetourTopics").click(function() {
+				loadForum();
+			});
 		});
 }
 
 function loadTopics() {
 	listPersons = invokeGet("../rest/listTopic", "failed to list topic", function(response) {
-		var list;
+		var list = " ";
 		listTopic = response;
-		if (listTopic == null) {
-			$("#TopicMsg").text("Il n'y a aucun topic.'");
+		if (listTopic.length == 0) {
+			$("#TopicMsg").text("Il n'y a aucun topic.");
 			return 
-		};
-		for (var i=0; i < listTopic.length; i++) {
+		} else {
+			for (var i=0; i < listTopic.length; i++) {
 			var topic = listTopic[i];					
-			list+= "<div class=\"Topic-box\">" + "<a href=\"/TDB_AE_V4/tdb/forum/topic.html?topicID=" + topic.id + "\">" + "<button class=\"buttonTopic\">" + "<span class=\"TitreTopic\">" + topic.titre + "</span><br>" + "<span class=\"DescTopic\">" + topic.description + "</span>" + "</button>" + "</a>" + "</div>";
-		}
-		
+			list+="<div class=\"Topic-box\">" + "<a href=\"/TDB_AE_V4/tdb/forum/topic.html?topicID=" + topic.id + "\">" + "<button class=\"buttonTopic\">" + "<span class=\"TitreTopic\">" + topic.titre + "</span><br>" + "<span class=\"DescTopic\">" + topic.description + "</span>" + "</button>" + "</a>" + "</div>";
+			}
+		};
+
 		$("#TopicList").empty();
 		$("#TopicList").append(list);
 	});
@@ -232,21 +257,27 @@ function loadReservation() {
 function loadMonCompte() {
 	$("#Page").load("monCompte/monCompte.html", function() {
 		var currentUser = Cookies.get('sessionMembre');
-		utilisateur = {};
-		utilisateur.username = currentUser;
-		invokeUser("../rest/recupeDonneesUser",utilisateur,"Erreur Chargement Donnees utilisateur", function(response) {
+		if (currentUser == "admin") {
+			$("#RealName").text("Admin");
+			$("#UserName").text("a.k.a Dieu");
+			$("#EmailUser").text("dieu@dieu.fr");
+			$("#PromoUser").text("+inf");
+		} else {
+			utilisateur = {};
+			utilisateur.username = currentUser;
+			invokeUser("../rest/recupeDonneesUser",utilisateur,"Erreur Chargement Donnees utilisateur", function(response) {
 			userl = response;
 			$("#RealName").text(userl.prenom + " " + userl.nom);
 			$("#UserName").text(userl.username);
 			$("#EmailUser").text(userl.mail);
 			$("#PromoUser").text(userl.annee);
+			$("#BTsCompte").load("monCompte/modifierBtnCompte.html", function() {
+			$("#BTModifierCompte").click(function() {
+				loadModifierCompte();
+			});
 		});
-		
-		$("#BTsCompte").load("monCompte/modifierBtnCompte.html", function() {
-		$("#BTModifierCompte").click(function() {
-			loadModifierCompte();
 		});
-	});
+		}
 	});
 }
 
@@ -462,7 +493,7 @@ function loadModifClub1() {
 			    });
 			    //Bureau add
 			    list="<select class=\"bur1\" id=\"bur1\">";
-				for (var i=0; i < listutil.length; i++) {
+				for (var i=0; i < bur.length; i++) {
 					var u = listutil[i];
 					list+="<option value=\""+ u.username + "\">" + u.prenom + " " + u.nom +"</option>";
 				}
@@ -513,45 +544,27 @@ function loadModifClub1() {
 			    	m2 = $(this).children("option:selected").val();
 			    });
 				$("#BTChangeTres").click(function() {
-					tres = {};
-					tres.username  = t;
-					asso.president = tres;
-					invokePost("../rest/changetres",asso,"failed to change tres");
+					invokePost("../rest/changetres",[t,asso],"failed to change tres");
 					loadModifClub1();
 				});
 				$("#BTChangePres").click(function() {
-					pres = {};
-					pres.username  = p;
-					asso.president = pres;
-					invokePost("../rest/changepres",asso,"failed to change pres");
+					invokePost("../rest/changepres",[p,asso],"failed to change pres");
 					loadModifClub1();
 				});
 				$("#BTABur").click(function() {
-					bur = {};
-					bur.username  = b1;
-					asso.president = bur;
-					invokePost("../rest/addbur",asso,"failed to add to bureau");
+					invokePost("../rest/addbur",[b1,asso],"failed to add to bureau");
 					loadModifClub1();
 				});
 				$("#BTAMem").click(function() {
-					mem = {};
-					mem.username  = m1;
-					asso.president = mem;
-					invokePost("../rest/addmem",asso,"failed to add to membres");
+					invokePost("../rest/addmem",[m1,asso],"failed to add to membres");
 					loadModifClub1();
 				});
 				$("#BTDBur").click(function() {
-					bur = {};
-					bur.username  = b2;
-					asso.president = bur;
-					invokePost("../rest/delbur",asso,"failed to add to bureau");
+					invokePost("../rest/delbur",[b2,asso],"failed to add to bureau");
 					loadModifClub1();
 				});
 				$("#BTDMem").click(function() {
-					mem = {};
-					mem.username  = m2;
-					asso.president = mem;
-					invokePost("../rest/delmem",asso,"failed to add to membres");
+					invokePost("../rest/delmem",[m2,asso],"failed to add to membres");
 					loadModifClub1();
 				});
 				$("#BTBye").click(function() {
@@ -592,33 +605,13 @@ function loadDestructionClub() {
 
 function loadLogOut() {
 	Cookies.remove('sessionMembre',{ path: '/' });
-	location.replace("/TDB_AE_V22/");
+	location.replace("/TDB_AE_V4/");
 }
 
 /***************************************************************************/
 /*INVOKES		************************************************************/
 /***************************************************************************/
 
-
-
-
-function loadAssoc () {
-	$("#ShowMessage").empty();
-	listAssoc = invokeGet("../rest/listassoc", "failed to list salles", function(response) {
-		var list;
-		var nom;
-		listAssoc = response;
-		if (listAssoc == null) return;
-		list="<select name=\"Assoc\" id=\"Assochang\">";
-		for (var i=0; i < listAssoc.length; i++) {
-			var a = listAssoc[i];
-			list+="<option value=\""+ a.nom + "\">" + a.nom + "</option>";
-		}
-		list+="</select>";
-		$("#selection-club").empty();
-		$("#selection-club").append(list);
-	});
-}
 
 function invokePost(url, data, successMsg, failureMsg) {
 	jQuery.ajax({
@@ -658,4 +651,71 @@ function invokeUser(url, data, failureMsg, responseHandler) {
 	    	console.log(failureMsg);
 	    }
 	});
+}
+
+function loadSmallDataBase() {
+	loadUsersDataBase();
+	loadSallesDataBase();
+	loadAssoDataBase();
+	loadEventsDataBase();
+	
+}
+
+function loadUsersDataBase(){
+	for (var i=0; i < 10; i++) {
+		utilisateur = {};
+		utilisateur.username = "User " + i;
+		utilisateur.password = "Pass " + i;
+		utilisateur.mail = "User"+i+"@"+"domaine.fr";
+		utilisateur.nom = "Nom "+i;
+		utilisateur.prenom = "Prenom "+i;
+		utilisateur.annee = 200 + i;
+		invokePost("../rest/addutilisateur", utilisateur, "L'utilisateur a ete ajoute'", "Erreur Ajout utilisateur");
+	}
+}
+
+function loadSallesDataBase() {
+	for (var i=0; i < 10; i++) {
+		salle = {};
+		salle.nom= "C" + 10 + i;
+		salle.batiment= "A";	
+		salle.etage= 1;
+		salle.capacite= 64;		
+		invokePost("../rest/addsalle", salle, "event was added", "failed to add an event");
+	}
+}
+
+function loadEventsDataBase() {
+			for (var i=0; i < 10; i++) {
+				event = {};
+				event.nom="Event" + i;
+				event.description="Description" + i;	
+				event.date="02/06/2022";
+				event.time="14:00";
+				s = {};
+				s.nom = "C" + 10 + i;
+				event.salle = s;
+				asso = {};
+				asso.nom = "Club" + i;
+				event.asso_organisateur=asso;
+				invokePost("../rest/addevent", event, "event was added", "failed to add an event");
+			
+			}
+	
+}
+
+function loadAssoDataBase() {
+		for (var i=0; i < 10; i++) {
+				club = {};
+				club.nom="Club" + i;
+				club.description="Description" + i;
+				prez = {};
+				trez = {};
+				prez.username = "User " + i;
+				trez.username = "User " + i;
+				club.president = prez
+				club.tresorier = trez
+				invokePost("../rest/addclub", club, "club was added", "failed to add a club");
+			}
+
 }

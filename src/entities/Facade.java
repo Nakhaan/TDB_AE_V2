@@ -1,7 +1,6 @@
 package entities;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Set;
 
 import javax.ejb.Singleton;
@@ -48,27 +47,6 @@ public class Facade {
 		em.persist(e);
 	}
 	
-	/*@POST
-	@Path("/recupeOrgaUserPresident")
-	@Produces({ "application/json" })
-	public Association recupeOrgaUserPresident(Utilisateur u) {
-		String username = u.getUsername();
-		Association a = em.createQuery("SELECT a FROM Association a where president=:username", Association.class).setParameter("username", username).getSingleResult();
-		return a;
-	}*/
-	
-	@POST
-	@Path("/subscribeevent")
-    @Consumes({ "application/json" })
-	public void SubscribeEvenenement(Evenement e) {
-		Evenement ev =em.find(Evenement.class, e.getNom());
-		Utilisateur ut = em.find(Utilisateur.class, e.getDescription());
-		Set<Utilisateur> participants = ev.getParticipants();
-		participants.add(ut);
-		ev.setParticipants(participants);
-		em.merge(ev);
-	}
-	
 	@POST
 	@Path("/loginutilisateur")
     @Consumes({ "application/json" })
@@ -90,7 +68,7 @@ public class Facade {
 	@GET
 	@Path("/listevents")
     @Produces({ "application/json" })
-	public Collection<Evenement> listEvenements() {
+	public Collection<Evenement> listevents() {
 		return em.createQuery("from Evenement", Evenement.class).getResultList();	
 	}
 	
@@ -161,10 +139,9 @@ public class Facade {
 	@POST
 	@Path("/changepres")
     @Consumes({ "application/json" })
-	public void changePres(Association a) {
+	public void changePres(String nom,Association a) {
 		Association asso =  em.find(Association.class,a.getNom());
-		Utilisateur p = a.getPresident();
-		Utilisateur prez = em.find(Utilisateur.class,p.getUsername());
+		Utilisateur prez = em.find(Utilisateur.class, nom);
 		asso.setPresident(prez);
 		em.merge(asso);
 	}
@@ -172,10 +149,9 @@ public class Facade {
 	@POST
 	@Path("/changetres")
     @Consumes({ "application/json" })
-	public void changeTres(Association a) {
+	public void changeTres(String nom,Association a) {
 		Association asso =  em.find(Association.class,a.getNom());
-		Utilisateur t = a.getPresident();
-		Utilisateur trez = em.find(Utilisateur.class,t.getUsername());
+		Utilisateur trez = em.find(Utilisateur.class, nom);
 		asso.setPresident(trez);
 		em.merge(asso);
 	}
@@ -183,10 +159,9 @@ public class Facade {
 	@POST
 	@Path("/addbur")
     @Consumes({ "application/json" })
-	public void addBur(Association a) {
+	public void addBur(String nom,Association a) {
 		Association asso =  em.find(Association.class,a.getNom());
-		Utilisateur p = a.getPresident();
-		Utilisateur perso = em.find(Utilisateur.class,p.getUsername());
+		Utilisateur perso = em.find(Utilisateur.class, nom);
 		Set<Utilisateur> bureau = asso.getBureau();
 		bureau.add(perso);
 		asso.setBureau(bureau);
@@ -196,10 +171,9 @@ public class Facade {
 	@POST
 	@Path("/addmem")
     @Consumes({ "application/json" })
-	public void addMem(Association a) {
+	public void addMem(String nom,Association a) {
 		Association asso =  em.find(Association.class,a.getNom());
-		Utilisateur p = a.getPresident();
-		Utilisateur perso = em.find(Utilisateur.class,p.getUsername());
+		Utilisateur perso = em.find(Utilisateur.class, nom);
 		Set<Utilisateur> membres = asso.getMembres();
 		membres.add(perso);
 		asso.setMembres(membres);
@@ -209,11 +183,10 @@ public class Facade {
 	@POST
 	@Path("/delbur")
     @Consumes({ "application/json" })
-	public void delBur(Association a) {
+	public void delBur(String nom,Association a) {
 		Association asso =  em.find(Association.class,a.getNom());
 		Set<Utilisateur> bureau = asso.getBureau();
-		Utilisateur p = a.getPresident();
-		Utilisateur perso = em.find(Utilisateur.class,p.getUsername());
+		Utilisateur perso = em.find(Utilisateur.class, nom);
 		bureau.remove(perso);
 		asso.setBureau(bureau);
 		em.merge(asso);
@@ -222,11 +195,10 @@ public class Facade {
 	@POST
 	@Path("/delmem")
     @Consumes({ "application/json" })
-	public void delMem(Association a) {
+	public void delMem(String nom,Association a) {
 		Association asso =  em.find(Association.class,a.getNom());
 		Set<Utilisateur> membres = asso.getMembres();
-		Utilisateur p = a.getPresident();
-		Utilisateur perso = em.find(Utilisateur.class,p.getUsername());
+		Utilisateur perso = em.find(Utilisateur.class, nom);
 		membres.remove(perso);
 		asso.setMembres(membres);
 		em.merge(asso);
@@ -237,13 +209,6 @@ public class Facade {
     @Produces({ "application/json" })
 	public Collection<Salle> listSalles() {
 		return em.createQuery("from Salle", Salle.class).getResultList();
-	}
-	
-	@GET
-	@Path("/listassos")
-    @Produces({ "application/json" })
-	public Collection<Association> listAssos() {
-		return em.createQuery("from Association", Association.class).getResultList();
 	}
 	
 	@GET
@@ -295,5 +260,7 @@ public class Facade {
 		Topic t = em.find(Topic.class, j.getTopicID());
 		m.setTopic(t);
 	}
+	
+	
 	
 }
